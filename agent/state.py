@@ -118,7 +118,10 @@ class RunState:
         self.limits = Limits(**event["limits"])
         self.phase = "planning" if self.mode == "plan" else "executing"
         self.status = self.phase
-        self.messages = [{"role": "user", "content": event["initial_message"]}]
+        # История начинается с системного промпта и задачи пользователя.
+        self.messages = list(event.get("initial_messages") or [
+            {"role": "user", "content": event["initial_message"]}
+        ])
 
     def _on_budget_debited(self, event: dict) -> None:
         if event.get("kind") == "model_request":

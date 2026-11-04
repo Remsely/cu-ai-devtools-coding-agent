@@ -35,18 +35,44 @@ EXIT_CODES = {
 TASK = "Исправь расчёт итоговой стоимости заказа, чтобы тесты проходили. " \
        "Тесты не меняй. Сам найди нужные файлы, внеси исправление и запусти тесты."
 
+SYSTEM_PROMPT = """\
+Ты — консольный coding-агент. Ты работаешь с небольшим проектом в workspace \
+и решаешь задачу, вызывая инструменты. Инструменты выбирай сам; заверши работу \
+текстовым ответом, когда задача решена и подтверждена. Ошибки инструментов не \
+страшны: читай код ошибки (error.code) и выбирай другой шаг. Тесты проекта \
+(test_order.py) и файлы вне workspace не изменяй.
+
+Режим планирования: сначала изучи проект инструментами list_files и read_file, \
+затем вызови submit_plan с планом вида {"goal": str, "steps": [{"id": "t1", \
+"description": str, "depends_on": [id], "tools": [имена], "verification": \
+{"command": str, "expect_exit_code": 0}}], "risks": [str], "assumptions": [str], \
+"done_criteria": str}. У каждого шага обязателен verification.command — bash-команда \
+проверки (например: test -f order.py; python -c "assert ..."; python -m unittest -v). \
+После submit_plan дождись утверждения плана пользователем.
+
+Режим исполнения: работай по текущей задаче из плана; закрывай шаг вызовом \
+complete_task(task_id) — runtime сам запустит проверку шага и не поверит \
+голословному «готово». Тесты запускай через Bash из корня workspace: \
+python -m unittest -v. Отвечай кратко, по-русски, без тега <think>. /no_think\
+"""
+
 
 # ------------------------------------------------------------------ helpers
 
-def initial_task_message(task: str, plan: bool) -> str:
+def initial_messages(task: str, plan: bool) -> list[dict]:
     if plan:
-        return (
+        user = (
             f"Задача: {task}\n\n"
             "Режим планирования: сначала изучи проект инструментами чтения "
             "(list_files, read_file), затем вызови submit_plan со структурированным "
             "планом. Инструменты изменения файлов и Bash на этом этапе недоступны."
         )
-    return f"Задача: {task}"
+    else:
+        user = f"Задача: {task}"
+    return [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": user},
+    ]
 
 
 def start_run(cfg: Config, task: str, plan_mode: bool) -> tuple[RunState, Journal]:
@@ -59,7 +85,7 @@ def start_run(cfg: Config, task: str, plan_mode: bool) -> tuple[RunState, Journa
         mode="plan" if plan_mode else "direct",
         workspace=str(cfg.workspace),
         limits=cfg.limits.as_dict(),
-        initial_message=initial_task_message(task, plan=plan_mode),
+        initial_messages=initial_messages(task, plan=plan_mode),
     )
     state = RunState.replay(Journal.load(journal.path), run_id)
     return state, journal
@@ -359,6 +385,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> int:
+    from agent.config import load_env_file
+
+    load_env_file()  # .env из корня репозитория, если есть
     args = build_parser().parse_args(argv)
     try:
         return args.func(args)

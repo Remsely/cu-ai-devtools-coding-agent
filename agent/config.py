@@ -8,6 +8,27 @@ import shutil
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def load_env_file(path: Path | None = None) -> None:
+    """Загружает .env (KEY=VALUE) в os.environ, не переопределяя уже заданное.
+
+    Секреты остаются вне репозитория; пример — в .env.example.
+    """
+    env_path = path or (REPO_ROOT / ".env")
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8-sig").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
 
 @dataclass(frozen=True)
 class Limits:
