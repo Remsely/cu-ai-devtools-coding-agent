@@ -1,0 +1,28 @@
+"""Инструмент complete_task (уровень 9)."""
+
+from __future__ import annotations
+
+from agent.tools.base import Param, Tool
+
+COMPLETE_TASK_TOOL = "complete_task"
+
+
+def _complete_task(args: dict, ctx) -> dict:
+    # Проверка результата и смена статуса задачи — в agent/tasks.py (loop);
+    # сам инструмент побочных эффектов не имеет.
+    return {"task_id": args.get("task_id")}
+
+
+COMPLETE_TASK = Tool(
+    name=COMPLETE_TASK_TOOL,
+    description=(
+        "Сообщает runtime, что текущая задача выполнена. Runtime сам запускает "
+        "команду проверки этой задачи из плана и только при совпадении кода "
+        "завершения помечает задачу выполненной. Текстовое заявление модели "
+        "результатом не считается."
+    ),
+    params=(Param("task_id", "string", "Идентификатор задачи из плана (например, t2)"),),
+    run_fn=_complete_task,
+    side_effect=False,
+    safely_repeatable=True,  # завершённая задача не перепроверяется
+)
