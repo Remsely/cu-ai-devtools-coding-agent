@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -199,11 +200,16 @@ def _chat_drive(orch: Orchestrator) -> None:
     _print_summary(orch.state)
 
 
+def _resolve_workspace(raw: str | None) -> Path:
+    """Каталог проекта: флаг --workspace > env AGENT_WORKSPACE > repo/workspace."""
+    return Path(
+        raw or os.environ.get("AGENT_WORKSPACE") or (REPO_ROOT / "workspace")
+    ).resolve()
+
+
 def cmd_chat(args) -> int:
     """Интерактивный диалог с агентом (по умолчанию при запуске без команд)."""
-    import os
-
-    workspace = Path(args.workspace).resolve()
+    workspace = _resolve_workspace(args.workspace)
     runs_dir = Path(args.runs_dir).resolve()
     model = os.environ.get("OPENAI_MODEL", "не задана (OPENAI_MODEL)")
     say("═" * 60)
@@ -329,7 +335,7 @@ def cmd_run(args) -> int:
                 f"неизвестная точка отказа: {name} (after_start | after_execute [:call_id])"
             )
     cfg = Config.from_env(
-        Path(args.workspace).resolve(),
+        _resolve_workspace(args.workspace),
         Path(args.runs_dir).resolve(),
         Limits.from_json(args.limits),
         failpoint=args.failpoint,
@@ -485,7 +491,8 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command")
 
     chat_p = sub.add_parser("chat", help="интерактивный диалог с агентом (по умолчанию)")
-    chat_p.add_argument("--workspace", default=str(REPO_ROOT / "workspace"))
+    chat_p.add_argument("--workspace", default=None,
+                        help="каталог проекта (по умолчанию: AGENT_WORKSPACE или <repo>/workspace)")
     chat_p.add_argument("--runs-dir", default=str(REPO_ROOT / "runs"))
     chat_p.add_argument("--limits", default=None, help='JSON лимитов, напр. {"tool_calls": 5}')
     _add_model_args(chat_p)
@@ -493,7 +500,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     run_p = sub.add_parser("run", help="новый запуск агента (неинтерактивный)")
     run_p.add_argument("--task", default=TASK, help="задача для агента")
-    run_p.add_argument("--workspace", default=str(REPO_ROOT / "workspace"))
+    run_p.add_argument("--workspace", default=None,
+                       help="каталог проекта (по умолчанию: AGENT_WORKSPACE или <repo>/workspace)")
     run_p.add_argument("--runs-dir", default=str(REPO_ROOT / "runs"))
     run_p.add_argument("--plan", action="store_true", help="режим планирования (Plan Mode)")
     run_p.add_argument("--auto-approve", action="store_true",
