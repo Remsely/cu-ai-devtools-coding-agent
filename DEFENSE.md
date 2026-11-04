@@ -4,15 +4,60 @@
 **интерактивного диалога** `python -m agent`. scripted-модель — только как
 запасной вариант без интернета (последний раздел).
 
-## Подготовка (один раз, до защиты)
+## Подготовка (один раз, до защиты — ~5 минут)
+
+### 0. Окружение проекта
+
+```bash
+cd coding-agent
+pip install -r requirements-dev.txt   # только pytest; сам агент — чистый stdlib
+python -m pytest tests -q             # 47 passed
+```
+
+### 1. Ollama: запуск, проверка, остановка
+
+Модели уже скачаны: `qwen3.5:9b` (основная) и `qwen3:8b` (запасная).
+Проверка сервера:
 
 ```bash
 curl -s http://localhost:11434/api/tags | head -c 120
-# пусто/ошибка → сервер не поднят: запустить «Ollama» из Пуска или `ollama serve`
-python -m pytest tests -q        # 47 passed — быстрая самопроверка runtime
+"$LOCALAPPDATA/Programs/Ollama/ollama.exe" list   # обе модели на месте?
 ```
 
-Сброс между демо (если нужно начать чисто):
+Не отвечает → запустить: Windows — «Ollama» из меню Пуск (трей), либо в
+терминале `ollama serve`. Linux/macOS — `ollama serve`.
+
+**ВАЖНО — контекст:** на сервере должно действовать
+`OLLAMA_CONTEXT_LENGTH=65536` (уже настроено через `setx`, применяется к
+новым процессам Ollama). Без него сервер **молча** режет контекст до 4096
+токенов — на длинных диалогах модель возвращает пустые ответы (подробности:
+README, «Ловушка Ollama»). Если Ollama запускалась до настройки — перезапустить.
+
+Перезапуск с явным контекстом / остановка (освободить VRAM):
+
+```bash
+taskkill /IM "ollama app.exe" /F; taskkill /IM "ollama.exe" /F      # остановка
+OLLAMA_CONTEXT_LENGTH=65536 ollama serve                            # запуск явно
+```
+
+### 2. Файл `.env` (в корне, в .gitignore)
+
+```
+OPENAI_BASE_URL=http://localhost:11434/v1/
+OPENAI_API_KEY=ollama
+OPENAI_MODEL=qwen3.5:9b
+AGENT_LLM_EXTRA={"think": false, "temperature": 0.2}
+```
+
+Шаблон — `.env.example`.
+
+### 3. Десятисекундный smoke живой модели
+
+```bash
+printf 'Проверка связи: ответь одной строкой и заверши работу.\nexit\n' | python -m agent
+```
+
+### Сброс состояния между демо (если нужно начать чисто)
 
 ```bash
 rm -rf runs && git checkout -- workspace/order.py
@@ -184,6 +229,18 @@ python -m agent resume <run_id> --decision retry \
 ```
 
 ---
+
+## Покрытие требований задания демо
+
+| Требование | Где показывается |
+|---|---|
+| Блок 1: agent loop, Bash, инструменты, пачки, ошибки | демо 1 (живые вызовы, self-healing) + автотесты |
+| Блок 2: WAL, неопределённый вызов, retry/skip/abort, идемпотентность | демо 2 + `test_recovery.py` |
+| Блок 3: Plan Mode, ноль побочных эффектов до утверждения | демо 1/2 (утверждение `y`) + `test_plan_mode_blocks_all_side_effects` |
+| Уровень 8: 4 лимита, пачка целиком, обрезка вывода, счётчики после resume | демо 4 + `test_budget.py` |
+| Уровень 9: задачи, зависимости, подтверждение runtime-ом, чеклист, resume без перезапуска | демо 1 (`tasks`, чеклист) + `test_tasks.py` |
+| Уровень 10: снапшоты, diff, откат, конфликт, attribution после сбоя | демо 3 + `test_changes.py` |
+| Контрольный проект: тесты не меняются | `git diff --stat workspace/test_order.py` в демо 1 |
 
 ## Типовые вопросы → где смотреть в коде
 
