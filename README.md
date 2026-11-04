@@ -37,14 +37,20 @@ export OPENAI_API_KEY=sk-...
 export OPENAI_MODEL=gpt-4o-mini
 ```
 
-Локальная Ollama как запасной вариант (ключ — любая непустая строка):
+Локальная Ollama как запасной вариант (ключ — любая непустая строка).
+Контрольная задача проверена на `qwen3.5:9b` (лучшие метрики tool calling
+в 8–9B классе на конец 2026; ~6 ГБ в 4-bit, помещается в 12 ГБ VRAM):
 
 ```bash
-ollama pull qwen3:4b && ollama serve
-export OPENAI_BASE_URL=http://localhost:11434/v1/
-export OPENAI_API_KEY=ollama
-export OPENAI_MODEL=qwen3:4b
+ollama pull qwen3.5:9b   # запасной вариант из задания: ollama pull qwen3:4b
+ollama serve
+# .env: OPENAI_BASE_URL=http://localhost:11434/v1/, OPENAI_API_KEY=ollama,
+#       OPENAI_MODEL=qwen3.5:9b
 ```
+
+Доп. параметры API (JSON) — через `AGENT_LLM_EXTRA`, например
+`AGENT_LLM_EXTRA={"think": false}` отключает рассуждения qwen3.x на стороне
+Ollama (системный промпт агента уже содержит `/no_think`).
 
 Для демо и тестов без сети используется детерминированная
 scripted-модель: `--script demo/checkpoint_script.json` — список реплик

@@ -110,11 +110,14 @@ class OpenAICompatModel:
     (OPENAI_BASE_URL=http://localhost:11434/v1/, ключ — любая непустая строка).
     """
 
-    def __init__(self, base_url: str, api_key: str, model: str, timeout: float = 300.0):
+    def __init__(self, base_url: str, api_key: str, model: str, timeout: float = 300.0,
+                 extra_payload: dict | None = None):
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        # Доп. поля запроса (например, {"think": false} для Ollama/qwen3.x).
+        self.extra_payload = extra_payload or {}
 
     @classmethod
     def from_env(cls) -> "OpenAICompatModel":
@@ -125,7 +128,11 @@ class OpenAICompatModel:
             raise LLMAPIError(
                 "задайте OPENAI_BASE_URL и OPENAI_MODEL (пример — в .env.example)"
             )
-        return cls(base_url, api_key, model)
+        try:
+            extra = json.loads(os.environ.get("AGENT_LLM_EXTRA", "") or "{}")
+        except ValueError as err:
+            raise LLMAPIError(f"AGENT_LLM_EXTRA не является JSON: {err}") from err
+        return cls(base_url, api_key, model, extra_payload=extra)
 
     def chat(self, messages: list[dict], tools: list[dict]) -> ModelReply:
         payload = {
@@ -133,6 +140,7 @@ class OpenAICompatModel:
             "messages": messages,
             "tools": tools,
             "tool_choice": "auto",
+            **self.extra_payload,
         }
         request = urllib.request.Request(
             self.base_url + "/chat/completions",
