@@ -54,7 +54,9 @@ AGENT_LLM_EXTRA={"think": false, "temperature": 0.2}
 ### 3. Десятисекундный smoke живой модели
 
 ```bash
-printf 'Проверка связи: ответь одной строкой и заверши работу.\nexit\n' | python -m agent
+python -m agent run --task "Проверка связи: вызови Bash с командой echo ok \
+и заверши работу кратким ответом." --no-input
+# Думает… → Bash(echo ok) → Ответ: … → ✔ Готово. (exit 0)
 ```
 
 ### Сброс состояния между демо (если нужно начать чисто)
