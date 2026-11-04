@@ -143,7 +143,11 @@ python -m agent status $(ls runs | tail -1)   # счётчики 2/2
 rm -rf runs
 python -m agent run --plan --script demo/checkpoint_script.json \
     --auto-approve --limits '{"tool_calls": 2}'
-# c2, c3 → BUDGET_EXCEEDED «пачка отклонена целиком», ни один не исполнялся
+# → read_file(order.py)      [отклонено: BUDGET_EXCEEDED]
+# → read_file(test_order.py) [отклонено: BUDGET_EXCEEDED]
+# ни один вызов пачки не исполнялся и не списывался; scripted-сценарий
+# после этого продолжает запрашивать инструменты — они также отклоняются
+# по лимиту (живая модель в такой ситуации меняет стратегию)
 ```
 
 Счётчики не обнуляются после resume — видно в демо 2 (`status` показывает
