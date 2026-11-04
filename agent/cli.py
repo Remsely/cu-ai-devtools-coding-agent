@@ -176,6 +176,12 @@ def _ask_decision(orch: Orchestrator, call_id: str) -> str:
 # ------------------------------------------------------------------ commands
 
 def cmd_run(args) -> int:
+    if args.failpoint:
+        name = args.failpoint.split(":", 1)[0]
+        if name not in ("after_start", "after_execute"):
+            raise SystemExit(
+                f"неизвестная точка отказа: {name} (after_start | after_execute [:call_id])"
+            )
     cfg = Config.from_env(
         Path(args.workspace).resolve(),
         Path(args.runs_dir).resolve(),
@@ -333,8 +339,10 @@ def build_parser() -> argparse.ArgumentParser:
                        help="утвердить план без вопроса (для тестов)")
     run_p.add_argument("--no-input", action="store_true", help="не задавать вопросов")
     run_p.add_argument("--limits", default=None, help='JSON лимитов, напр. {"tool_calls": 5}')
-    run_p.add_argument("--failpoint", default=None, choices=["after_start", "after_execute"],
-                       help="управляемая точка отказа для демонстрации сбоя")
+    run_p.add_argument("--failpoint", default=None,
+                       help="управляемая точка отказа для демо сбоя: "
+                            "after_start | after_execute, адресно через ':' "
+                            "(after_execute:c6)")
     _add_model_args(run_p)
     run_p.set_defaults(func=cmd_run)
 

@@ -122,10 +122,18 @@ def apply_decision(orch: Orchestrator, call_id: str, choice: str) -> None:
 def describe_undefined(orch: Orchestrator, call_id: str) -> None:
     """Печатает карточку неопределённого вызова для решения пользователя."""
     record = orch.state.calls[call_id]
-    say(f"Неопределённый вызов (начат, результат не сохранён):")
+    say("Неопределённый вызов (начат, результат не сохранён):")
     say(f"  tool_call_id: {record.id}")
     say(f"  инструмент:   {record.name}  (safely_repeatable по классификации README)")
     say(f"  аргументы:    {record.args_json[:300]}")
+    # Уровень 10: сверяем дерево с последним сохранённым состоянием и
+    # показываем обнаруженные изменения пользователю (требование задания).
+    dirty = changes.conflicts(orch.state, orch.cfg)
+    if dirty:
+        say("  наблюдение:   дерево отличается от журнала: " + ", ".join(sorted(dirty))
+            + " — при retry/skip эти изменения будут отнесены к данному запуску")
+    else:
+        say("  наблюдение:   дерево совпадает с журналом (изменений нет)")
     if record.name == "write_file":
         try:
             args = json.loads(record.args_json)

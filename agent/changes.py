@@ -233,6 +233,7 @@ def rollback(state, journal, cfg) -> dict:
     aggregated = aggregate_changes(state)
     if not aggregated:
         journal.append(events.ROLLBACK_PERFORMED, restored=[], removed=[])
+        say("[откат] у этого запуска нет изменений файлов")
         return {"restored": [], "removed": [], "note": "изменений не было"}
 
     # Сверка: текущие хеши должны совпадать с итоговыми хешами журнала.
