@@ -89,19 +89,32 @@ scripted-модель: `--script demo/checkpoint_script.json` — список �
 
 ## Запуск агента
 
-Контрольная задача (демо на scripted-модели, без сети):
+Основной способ — интерактивный диалог (без аргументов):
 
 ```bash
-python -m agent run --plan --script demo/checkpoint_script.json --auto-approve
+python -m agent
 ```
 
-С реальной моделью:
+В диалоге: введите задачу текстом → агент изучит проект, предложит план и
+спросит `y/n` → после утверждения исполнит (чеклист задач в stdout) → итог.
+Команды внутри: `status`, `tasks`, `diff`, `rollback`, `help`, `exit`.
+При сбое процесса (`AGENT_FAILPOINT`) диалог сам предложит `r/s/a`.
+
+Контрольная задача на живой модели (локальная Ollama, `.env` из `.env.example`):
 
 ```bash
-python -m agent run --plan --task "Исправь расчёт итоговой стоимости заказа..."
+python -m agent
+# задача> Исправь расчёт итоговой стоимости заказа, чтобы тесты проходили. Тесты не меняй.
+# Утвердить план? y
 ```
 
-Полный список команд:
+Демо без сети — на детерминированном сценарии:
+
+```bash
+python -m agent chat --script demo/checkpoint_script.json
+```
+
+Неинтерактивные команды (тесты, CI):
 
 ```
 python -m agent run     --task TASK [--plan] [--auto-approve] [--limits JSON]

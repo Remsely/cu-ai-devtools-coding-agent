@@ -151,6 +151,27 @@ def test_abort_decision_terminates(workspace, runs_dir):
     assert "c6" in orch2.state.stop_reason
 
 
+def test_failpoint_fires_once_retry_does_not_recrash(workspace, runs_dir):
+    """Точка отказа срабатывает один раз: retry не падает повторно."""
+    script = [
+        {"tool_calls": [{"id": "x1", "name": "write_file",
+                         "arguments": {"path": "order.py", "content": ORDER_FIXED}}]},
+        {"text": "готово"},
+    ]
+    cfg = make_cfg(workspace, runs_dir, failpoint="after_execute:x1")
+    state, journal = start_run(cfg, TASK, plan_mode=False)
+    orch = Orchestrator(state, journal, ScriptedModel(script[:1]), cfg)
+    with pytest.raises(FailpointCrash):
+        orch.run()
+
+    # retry на том же Orchestrator: failpoint уже сработал, повторного сбоя нет
+    recovery.apply_decision(orch, "x1", "retry")
+    assert len(orch.state.calls["x1"].attempts) == 2
+    assert orch.state.calls["x1"].attempts[-1].status == "completed"
+    orch.model = ScriptedModel(script[1:])
+    assert orch.run() == "completed"
+
+
 def test_duplicate_tool_call_id_replay_and_protocol_error(workspace, runs_dir):
     """Повтор tool_call_id: те же аргументы — сохранённый результат без
     повторного изменения файлов; другие аргументы — ошибка протокола."""

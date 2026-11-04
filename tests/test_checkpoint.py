@@ -142,6 +142,33 @@ def test_invalid_plan_is_rejected_and_loop_continues(workspace, runs_dir):
     assert state.plan["goal"] == PLAN["goal"]
 
 
+def test_stall_guard_stops_run(workspace, runs_dir):
+    """Три текст-ответа подряд без инструментов — остановка, а не выжигание
+    бюджета повторяющимися отговорками."""
+    script = [{"text": t} for t in ("сейчас составлю план", "почти готово", "ещё минуту")]
+    cfg = make_cfg(workspace, runs_dir)
+    state, journal = start_run(cfg, TASK, plan_mode=True)
+    orch = Orchestrator(state, journal, ScriptedModel(script), cfg)
+    assert orch.run() == "failed"
+    assert "трижды" in (state.stop_reason or "")
+    assert state.counters.model_requests == 3  # бюджет не выжжен до лимита
+
+
+def test_plan_passed_as_string_is_autoparsed(workspace, runs_dir):
+    """Модель передала план JSON-строкой — runtime парсит, а не отклоняет."""
+    import json as json_mod
+
+    script = [
+        {"tool_calls": [{"id": "s1", "name": "submit_plan",
+                         "arguments": {"plan": json_mod.dumps(PLAN, ensure_ascii=False)}}]},
+    ]
+    cfg = make_cfg(workspace, runs_dir)
+    state, journal = start_run(cfg, TASK, plan_mode=True)
+    orch = Orchestrator(state, journal, ScriptedModel(script), cfg)
+    assert orch.run() == "awaiting_approval"
+    assert state.plan is not None and state.plan["goal"] == PLAN["goal"]
+
+
 def test_rejection_terminates_run(workspace, runs_dir):
     cfg = make_cfg(workspace, runs_dir)
     state, journal = start_run(cfg, TASK, plan_mode=True)

@@ -157,7 +157,12 @@ class OpenAICompatModel:
         except urllib.error.HTTPError as err:
             detail = err.read().decode("utf-8", errors="replace")[:500]
             raise LLMAPIError(f"HTTP {err.code} от модели: {detail}", status=err.code) from err
-        except (urllib.error.URLError, TimeoutError, OSError) as err:
+        except urllib.error.URLError as err:
+            hint = ""
+            if "localhost" in self.base_url or "127.0.0.1" in self.base_url:
+                hint = " (похоже, локальный сервер не запущен; для Ollama: ollama serve)"
+            raise LLMAPIError(f"модель недоступна: {err.reason}{hint}") from err
+        except (TimeoutError, OSError) as err:
             raise LLMAPIError(f"модель недоступна: {err}") from err
 
         choice = body["choices"][0]["message"]

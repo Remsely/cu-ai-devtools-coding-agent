@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 from agent import changes, events, recovery
@@ -52,8 +53,14 @@ SYSTEM_PROMPT = """\
 
 Режим исполнения: работай по текущей задаче из плана; закрывай шаг вызовом \
 complete_task(task_id) — runtime сам запустит проверку шага и не поверит \
-голословному «готово». Тесты запускай через Bash из корня workspace: \
-python -m unittest -v. Отвечай кратко, по-русски, без тега <think>. /no_think\
+голословному «готово». Если плановая проверка сама по себе ошибочна (например, \
+синтаксис), передай исправленную команду в complete_task(task_id, \
+verification_command="..."). Пиши проверки просто, без try/except в одну строку: \
+python -c "from order import f; assert f(...) == ...". Тесты запускай через Bash \
+из корня workspace: python -m unittest -v. ВАЖНО: в этой системе Python \
+запускается командой `python` (не python3) — используй `python` во ВСЕХ командах, \
+включая verification в плане. Если проверка не прошла — прочитай вывод команды \
+в ошибке и почини код. Отвечай кратко, по-русски, без тега <think>. /no_think\
 """
 
 
@@ -114,11 +121,148 @@ def build_model(args) -> object:
     return OpenAICompatModel.from_env()
 
 
-def _ask(prompt: str) -> str:
+def _ask(prompt: str) -> str | None:
+    """Читает ответ пользователя; None — ввод исчерпан (EOF)."""
     try:
         return input(prompt)
     except EOFError:
-        return ""
+        return None
+
+
+CHAT_HELP = """\
+Команды:
+  <текст задачи>   — новая задача: агент составит план, утвердит у вас и исполнит
+  status           — состояние последнего запуска (бюджет, вызовы, решения)
+  tasks            — чеклист задач последнего запуска
+  diff             — изменения файлов последнего запуска
+  rollback         — откатить изменения последнего запуска
+  help             — эта справка
+  exit             — выход
+Внутри работы агента: y/n — утверждение плана, r/s/a — решение после сбоя."""
+
+
+def _print_summary(state: RunState) -> None:
+    if state.status == "completed":
+        say("")
+        say("─" * 60)
+        say("✔ Готово." if state.final_answer is not None else "✔ Завершено.")
+        if state.final_answer:
+            say(f"  Итог: {state.final_answer}")
+        if state.changes:
+            affected = ", ".join(sorted(changes.aggregate_changes(state)))
+            say(f"  Изменённые файлы: {affected}")
+        c, l = state.counters, state.limits
+        say(f"  Бюджет: модель {c.model_requests}/{l.model_requests}, "
+            f"инструменты {c.tool_calls}/{l.tool_calls}, "
+            f"побочные {c.side_effects}/{l.side_effects}")
+        say(f"  Изменения: python -m agent diff {state.run_id}")
+        say(f"  Откат:     python -m agent rollback {state.run_id}")
+        say("─" * 60)
+    elif state.status in ("limit_reached", "failed", "aborted"):
+        say("")
+        say(f"✖ Запуск остановлен: {state.status}"
+            + (f" ({state.stop_reason})" if state.stop_reason else ""))
+
+
+def _chat_resolve_undefined(orch: Orchestrator) -> bool:
+    """Интерактивное разрешение неопределённых вызовов после сбоя."""
+    undefined, pending = recovery.analyze(orch.state)
+    if pending:
+        recovery.mark_not_executed(orch, pending)
+    for call_id in undefined:
+        choice = _ask_decision(orch, call_id)
+        recovery.apply_decision(orch, call_id, choice)
+        if orch.state.status == "aborted":
+            say("Запуск завершён по решению пользователя (abort).")
+            return False
+    return True
+
+
+def _chat_drive(orch: Orchestrator) -> None:
+    """Живой цикл в диалоге: запуск → утверждение плана → сбой → итог."""
+    try:
+        status = orch.run()
+    except FailpointCrash:
+        say("[сбой] процесс остановлен; состояние сохранено в журнале")
+        if _chat_resolve_undefined(orch):
+            _chat_drive(orch)
+        return
+    if status == "awaiting_approval":
+        _print_plan(orch.state)
+        choice = (_ask("Утвердить план? [y]es / [n]o: ") or "").strip().lower()
+        if choice in ("y", "yes", "д", "да"):
+            orch.approve_plan()
+            _chat_drive(orch)
+        else:
+            orch.reject_plan("отклонён в диалоге")
+            say("План отклонён, запуск завершён.")
+        return
+    _print_summary(orch.state)
+
+
+def cmd_chat(args) -> int:
+    """Интерактивный диалог с агентом (по умолчанию при запуске без команд)."""
+    import os
+
+    workspace = Path(args.workspace).resolve()
+    runs_dir = Path(args.runs_dir).resolve()
+    model = os.environ.get("OPENAI_MODEL", "не задана (OPENAI_MODEL)")
+    say("═" * 60)
+    say(" Консольный coding-агент")
+    say(f" Модель: {model}    Workspace: {workspace}")
+    if args.script:
+        say(f" Модель (scripted): {args.script}")
+    say("═" * 60)
+    say(CHAT_HELP)
+
+    last_run: str | None = None
+    while True:
+        try:
+            line = _ask("\nзадача|команда> ")
+        except KeyboardInterrupt:
+            say("")
+            continue
+        if line is None:  # EOF (ввод исчерпан) — выходим, а не крутимся вхолостую
+            say("")
+            say("Ввод исчерпан — выхожу. До встречи.")
+            return 0
+        line = line.strip()
+        if not line:
+            continue
+        low = line.lower()
+        if low in ("exit", "quit", "q", "выход"):
+            say("До встречи.")
+            return 0
+        if low in ("help", "?", "помощь"):
+            say(CHAT_HELP)
+            continue
+
+        run_commands = {"status": cmd_status, "tasks": cmd_tasks,
+                        "diff": cmd_diff, "rollback": cmd_rollback}
+        if low in run_commands:
+            if not last_run:
+                say("Запусков в этой сессии ещё не было — введите задачу.")
+                continue
+            cmd_args = argparse.Namespace(run_id=last_run, runs_dir=str(runs_dir))
+            run_commands[low](cmd_args)
+            continue
+
+        # всё остальное — новая задача для агента (Plan Mode по умолчанию)
+        try:
+            cfg = Config.from_env(workspace, runs_dir, Limits.from_json(args.limits))
+        except RuntimeError as err:
+            say(str(err))
+            continue
+        state, journal = start_run(cfg, line, plan_mode=True)
+        last_run = state.run_id
+        say("")
+        say(f"▶ Запуск {state.run_id}: агент сначала изучит проект и предложит план.")
+        try:
+            orch = Orchestrator(state, journal, build_model(args), cfg)
+        except Exception as err:  # LLMAPIError: нет модели и т.п.
+            say(f"Не удалось запустить модель: {err}")
+            continue
+        _chat_drive(orch)
 
 
 def _print_plan(state: RunState) -> None:
@@ -149,7 +293,7 @@ def _drive(orch: Orchestrator, args) -> int:
             orch.approve_plan()
             return _drive(orch, args)
         if not getattr(args, "no_input", False):
-            choice = _ask("Утвердить план? [y]es / [n]o: ").strip().lower()
+            choice = (_ask("Утвердить план? [y]es / [n]o: ") or "").strip().lower()
             if choice in ("y", "yes", "д", "да"):
                 orch.approve_plan()
                 return _drive(orch, args)
@@ -163,7 +307,11 @@ def _drive(orch: Orchestrator, args) -> int:
 def _ask_decision(orch: Orchestrator, call_id: str) -> str:
     recovery.describe_undefined(orch, call_id)
     while True:
-        choice = _ask("Действие: [r]etry / [s]kip / [a]bort: ").strip().lower()
+        answer = _ask("Действие: [r]etry / [s]kip / [a]bort: ")
+        if answer is None:  # EOF — безопасный выход из неопределённости
+            say("Ввод исчерпан: считаем abort.")
+            return "abort"
+        choice = answer.strip().lower()
         if choice in ("r", "retry", "п"):
             return "retry"
         if choice in ("s", "skip", "с"):
@@ -197,6 +345,9 @@ def cmd_run(args) -> int:
 
 def cmd_resume(args) -> int:
     state, journal, cfg = load_run(Path(args.runs_dir).resolve(), args.run_id)
+    # resume не должен падать в точке отказа повторно — сбой демонстрируется
+    # в run, восстановление работает без него
+    cfg = replace(cfg, failpoint=None)
     if state.status in TERMINAL_STATUSES:
         say(f"Запуск {args.run_id} уже завершён: {state.status}"
             + (f" ({state.stop_reason})" if state.stop_reason else ""))
@@ -327,10 +478,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="agent",
         description="Учебный coding agent: agent loop, восстановление, бюджеты, Plan Mode",
+        epilog="Быстрый старт: python -m agent  — интерактивный диалог с агентом",
     )
-    sub = parser.add_subparsers(dest="command", required=True)
+    sub = parser.add_subparsers(dest="command")
 
-    run_p = sub.add_parser("run", help="новый запуск агента")
+    chat_p = sub.add_parser("chat", help="интерактивный диалог с агентом (по умолчанию)")
+    chat_p.add_argument("--workspace", default=str(REPO_ROOT / "workspace"))
+    chat_p.add_argument("--runs-dir", default=str(REPO_ROOT / "runs"))
+    chat_p.add_argument("--limits", default=None, help='JSON лимитов, напр. {"tool_calls": 5}')
+    _add_model_args(chat_p)
+    chat_p.set_defaults(func=cmd_chat)
+
+    run_p = sub.add_parser("run", help="новый запуск агента (неинтерактивный)")
     run_p.add_argument("--task", default=TASK, help="задача для агента")
     run_p.add_argument("--workspace", default=str(REPO_ROOT / "workspace"))
     run_p.add_argument("--runs-dir", default=str(REPO_ROOT / "runs"))
@@ -396,6 +555,10 @@ def main(argv=None) -> int:
     from agent.config import load_env_file
 
     load_env_file()  # .env из корня репозитория, если есть
+    if argv is None:
+        argv = sys.argv[1:]
+    if not argv:
+        argv = ["chat"]  # python -m agent → интерактивный диалог
     args = build_parser().parse_args(argv)
     try:
         return args.func(args)

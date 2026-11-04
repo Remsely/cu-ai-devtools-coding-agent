@@ -119,9 +119,13 @@ def run_verification(cfg, verification: dict) -> dict:
     }
 
 
-def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int) -> None:
+def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int,
+                  override_command: str | None = None) -> None:
     """Обработка complete_task: проверка результата самим runtime.
 
+    Команда проверки берётся из плана; если плановая команда сама по себе
+    ошибочна, модель может передать исправленную через override_command —
+    исполняет и фиксирует код завершения всё равно runtime.
     Журналирует tool_call_finished с результатом проверки; при успехе —
     task_completed и запуск следующей задачи.
     """
@@ -153,7 +157,10 @@ def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int)
             f"задача {task_id} ждёт завершения зависимостей: {', '.join(unmet)}",
         )
         return
-    if not task.verification or not task.verification.get("command"):
+    verification_spec = dict(task.verification or {})
+    if override_command:
+        verification_spec["command"] = override_command
+    if not verification_spec.get("command"):
         _finish_with_error(
             journal, call_id, attempt, VERIFICATION_REQUIRED,
             f"у задачи {task_id} нет проверяемого результата (verification.command "
@@ -161,7 +168,7 @@ def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int)
         )
         return
 
-    verification = run_verification(cfg, task.verification)
+    verification = run_verification(cfg, verification_spec)
     if verification["ok"]:
         result = {"ok": True, "data": {"task_id": task_id, "verification": verification}}
         _finish(journal, call_id, attempt, result)
@@ -170,10 +177,16 @@ def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int)
         start_next_task(state, journal)
         return
 
+    output_tail = (verification.get("output") or "").strip()[-200:]
+    message = (
+        f"проверка задачи {task_id} не пройдена: `{verification['command']}` "
+        f"завершилась с кодом {verification['exit_code']}"
+    )
+    if output_tail:
+        message += f"; вывод команды: {output_tail}"
     error = ToolError(
         VERIFICATION_FAILED,
-        f"проверка задачи {task_id} не пройдена: `{verification['command']}` "
-        f"завершилась с кодом {verification['exit_code']}",
+        message,
         recoverable=True,
         data={"task_id": task_id, "verification": verification},
     )

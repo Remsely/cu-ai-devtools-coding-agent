@@ -63,6 +63,20 @@ def say(text: str) -> None:
     print(text, flush=True)
 
 
+def _fmt_call(call: ToolCallRequest) -> str:
+    """Компактное человекочитаемое описание вызова инструмента."""
+    args = call.arguments or {}
+    if call.name == "Bash":
+        return f"Bash({str(args.get('command', ''))[:70]})"
+    if call.name in ("read_file", "write_file"):
+        return f"{call.name}({args.get('path', '')})"
+    if call.name == "list_files":
+        return "list_files()"
+    if call.name == "complete_task":
+        return f"complete_task({args.get('task_id', '')})"
+    return call.name
+
+
 def _args_json(call: ToolCallRequest) -> str:
     return json.dumps(call.arguments or {}, ensure_ascii=False, sort_keys=True)
 
@@ -100,6 +114,12 @@ class Orchestrator:
         # Каждое событие журнала немедленно применяется к состоянию:
         # живое состояние всегда равно replay журнала (проверяется тестами).
         journal.on_append = state.apply
+        # Счётчик «текстовых» ответов подряд без инструментальных шагов —
+        # защита от выжигания бюджета повторяющимися отговорками модели.
+        self._stall_turns = 0
+        # Точка отказа срабатывает один раз на вызов: retry/resume не должны
+        # падать повторно в той же точке.
+        self._fired_failpoints: set[str] = set()
 
     # ------------------------------------------------------------- фазы
 
@@ -126,29 +146,49 @@ class Orchestrator:
                 return state.status
 
             # Списание бюджета ДО обращения к модели; после сбоя не возвращается.
-            self.journal.append(events.BUDGET_DEBITED, kind="model_request")
-            try:
-                reply = self.model.chat(state.messages, tools_for_phase(self.tools, state.phase))
-            except LLMAPIError as err:
-                self._finish("failed", reason=f"ошибка API модели: {err}")
-                return state.status
-            except ScriptExhausted as err:
-                self._finish("failed", reason=f"scripted-модель исчерпана: {err}")
-                return state.status
+            # Пустой ответ (нет ни текста, ни tool calls — замечено у qwen3.5
+            # в Ollama) повторяем один раз; каждый запрос честно списывается.
+            attempts = 0
+            while True:
+                self.journal.append(events.BUDGET_DEBITED, kind="model_request")
+                model_name = getattr(self.model, "model", type(self.model).__name__)
+                say("")
+                say(f"[ход {state.turn + 1}] думаю (модель: {model_name})...")
+                try:
+                    reply = self.model.chat(
+                        state.messages, tools_for_phase(self.tools, state.phase)
+                    )
+                except LLMAPIError as err:
+                    self._finish("failed", reason=f"ошибка API модели: {err}")
+                    return state.status
+                except ScriptExhausted as err:
+                    self._finish("failed", reason=f"scripted-модель исчерпана: {err}")
+                    return state.status
+                attempts += 1
+                if (reply.text and reply.text.strip()) or reply.tool_calls:
+                    break
+                if attempts >= 2:
+                    break
+                say("  (пустой ответ модели — повторяю запрос)")
 
             self.journal.append(
                 events.MODEL_RESPONSE, turn=state.turn + 1, message=assistant_message(reply)
             )
             if reply.tool_calls:
-                say(
-                    f"[turn {state.turn}] модель: {len(reply.tool_calls)} tool call(s): "
-                    + ", ".join(f"{c.name}({c.id})" for c in reply.tool_calls)
-                )
+                self._stall_turns = 0
+                for call in reply.tool_calls:
+                    say(f"  агент вызывает: {_fmt_call(call)}")
                 self._handle_batch(reply.tool_calls)
                 continue
 
-            say(f"[turn {state.turn}] модель: текстовый ответ")
+            if reply.text:
+                snippet = reply.text.strip()
+                if len(snippet) > 600:
+                    snippet = snippet[:600] + "…"
+                say(f"  агент отвечает: {snippet}")
             if state.phase == "planning" and state.plan is None:
+                if self._register_stall():
+                    return state.status
                 self.journal.append(
                     events.USER_NOTE,
                     text=(
@@ -161,6 +201,8 @@ class Orchestrator:
             if open_tasks:
                 # Уровень 9: финальный текст не закрывает открытые задачи —
                 # статус подтверждает только проверка runtime.
+                if self._register_stall():
+                    return state.status
                 current = state.current_task_id or "—"
                 pending = ", ".join(t.id for t in open_tasks)
                 self.journal.append(
@@ -209,6 +251,13 @@ class Orchestrator:
             if call.parse_error:
                 self._refuse(call, PARSE_ERROR, call.parse_error)
                 continue
+            # Модели иногда передают план JSON-строкой: парсим до валидации,
+            # чтобы схема видела объект (иначе отказ на слое схемы).
+            if call.name == PLAN_TOOL and isinstance((call.arguments or {}).get("plan"), str):
+                try:
+                    call.arguments["plan"] = json.loads(call.arguments["plan"])
+                except ValueError:
+                    pass  # схема отклонит с понятным сообщением
             # Дедупликация и защита протокола (блок 2)
             record = state.calls.get(call.id)
             if record is not None and record.status == "completed":
@@ -310,13 +359,15 @@ class Orchestrator:
             self._execute_submit_plan(call, attempt)
             return
         if call.name == COMPLETE_TASK_TOOL:
+            args = call.arguments or {}
             tasks.complete_task(
                 state,
                 self.journal,
                 self.cfg,
-                (call.arguments or {}).get("task_id", ""),
+                args.get("task_id", ""),
                 call.id,
                 attempt,
+                override_command=args.get("verification_command"),
             )
             return
 
@@ -364,7 +415,14 @@ class Orchestrator:
             say(f"[tool {call.id}] {call.name} → ошибка {code}{note}")
 
     def _execute_submit_plan(self, call: ToolCallRequest, attempt: int) -> None:
-        plan, errors = validate_plan((call.arguments or {}).get("plan"))
+        raw_plan = (call.arguments or {}).get("plan")
+        if isinstance(raw_plan, str):
+            # Модели иногда передают план строкой — принимаем с автопарсингом.
+            try:
+                raw_plan = json.loads(raw_plan)
+            except ValueError:
+                pass
+        plan, errors = validate_plan(raw_plan)
         if plan is None:
             result = {
                 "ok": False,
@@ -415,11 +473,30 @@ class Orchestrator:
             return
         if len(parts) > 1 and parts[1] != call.id:
             return
+        if failpoint in self._fired_failpoints:
+            return  # уже срабатывала: retry/resume проходят дальше
+        self._fired_failpoints.add(failpoint)
         say(
             f"[failpoint {failpoint}] управляемый сбой на вызове {call.id}; "
             "процесс останавливается"
         )
         raise FailpointCrash(failpoint)
+
+    def _register_stall(self) -> bool:
+        """Третий текст-без-инструментов подряд — остановка запуска.
+
+        Повторяющиеся отговорки должны заканчиваться, а не крутиться до
+        исчерпания бюджета (принцип конечного бюджета agent loop).
+        Возвращает True, если запуск остановлен.
+        """
+        self._stall_turns += 1
+        if self._stall_turns >= 3:
+            self._finish(
+                "failed",
+                reason="модель трижды ответила текстом без инструментальных шагов",
+            )
+            return True
+        return False
 
     def _finish(self, status: str, reason: str | None = None, final_answer: str | None = None) -> None:
         payload: dict = {"status": status}
