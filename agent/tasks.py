@@ -57,7 +57,7 @@ def on_plan_approved(state, journal) -> None:
         for step in state.plan["steps"]
     ]
     journal.append(events.TASKS_CREATED, tasks=payload)
-    say(f"[задачи] создано {len(payload)} задач из плана")
+    say(f"  · план разбит на {len(payload)} задач")
     start_next_task(state, journal)
 
 
@@ -74,7 +74,7 @@ def start_next_task(state, journal) -> str | None:
         print_checklist(state)
         return None
     journal.append(events.TASK_STARTED, task_id=task.id)
-    say(f"[задача] начата: {task.id} — {task.description}")
+    say(f"▶ задача {task.id}: {task.description}")
     verification = (task.verification or {}).get("command", "—")
     journal.append(
         events.USER_NOTE,
@@ -148,7 +148,7 @@ def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int,
             },
         }
         _finish(journal, call_id, attempt, result)
-        say(f"[задача] {task_id}: уже завершена ранее, повторная проверка не выполняется")
+        say(f"  · задача {task_id} уже завершена ранее — без повторной проверки")
         return
     if task.status == "pending":
         unmet = [d for d in task.depends_on if state.tasks[d].status != "completed"]
@@ -173,7 +173,7 @@ def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int,
         result = {"ok": True, "data": {"task_id": task_id, "verification": verification}}
         _finish(journal, call_id, attempt, result)
         journal.append(events.TASK_COMPLETED, task_id=task_id, verification=verification)
-        say(f"[задача] {task_id}: подтверждена проверкой (exit_code={verification['exit_code']})")
+        say(f"✓ задача {task_id} подтверждена (exit_code={verification['exit_code']})")
         start_next_task(state, journal)
         return
 
@@ -191,7 +191,7 @@ def complete_task(state, journal, cfg, task_id: str, call_id: str, attempt: int,
         data={"task_id": task_id, "verification": verification},
     )
     _finish(journal, call_id, attempt, error.envelope())
-    say(f"[задача] {task_id}: проверка не пройдена, задача остаётся открытой")
+    say(f"⚠ задача {task_id}: проверка не пройдена (exit_code={verification['exit_code']})")
 
 
 def _finish(journal, call_id: str, attempt: int, result: dict) -> None:
@@ -209,4 +209,4 @@ def _finish(journal, call_id: str, attempt: int, result: dict) -> None:
 def _finish_with_error(journal, call_id, attempt, code: str, message: str) -> None:
     result = {"ok": False, "error": {"code": code, "message": message, "recoverable": True}}
     _finish(journal, call_id, attempt, result)
-    say(f"[задача] {code}: {message}")
+    say(f"  ⚠ {code}: {message[:90]}")

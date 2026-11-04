@@ -188,7 +188,6 @@ def _chat_drive(orch: Orchestrator) -> None:
             _chat_drive(orch)
         return
     if status == "awaiting_approval":
-        _print_plan(orch.state)
         choice = (_ask("Утвердить план? [y]es / [n]o: ") or "").strip().lower()
         if choice in ("y", "yes", "д", "да"):
             orch.approve_plan()
@@ -288,7 +287,6 @@ def _drive(orch: Orchestrator, args) -> int:
         )
         return 70
     if status == "awaiting_approval":
-        _print_plan(orch.state)
         if getattr(args, "auto_approve", False):
             orch.approve_plan()
             return _drive(orch, args)
@@ -340,7 +338,9 @@ def cmd_run(args) -> int:
     say(f"Запуск {state.run_id}: workspace={cfg.workspace}, режим="
         + ("планирование" if args.plan else "прямое исполнение"))
     orch = Orchestrator(state, journal, build_model(args), cfg)
-    return _drive(orch, args)
+    exit_code = _drive(orch, args)
+    _print_summary(state)
+    return exit_code
 
 
 def cmd_resume(args) -> int:
@@ -425,12 +425,14 @@ def cmd_tasks(args) -> int:
 
     tasks_mod.print_checklist(state)
     for task in state.tasks.values():
-        verification = (task.verification or {}).get("command", "—")
+        # фактическая команда проверки (могла быть исправлена через verification_command)
+        command = (task.verification_result or {}).get("command") \
+            or (task.verification or {}).get("command", "—")
         result = task.verification_result or {}
         extra = (
-            f"проверка: `{verification}` → exit_code={result.get('exit_code')}"
+            f"проверка: `{command}` → exit_code={result.get('exit_code')}"
             if task.status == "completed"
-            else f"проверка: `{verification}`"
+            else f"проверка: `{command}`"
         )
         say(f"  {task.id} [{task.status}] {task.description} ({extra})")
     return 0
@@ -450,7 +452,7 @@ def cmd_rollback(args) -> int:
     try:
         changes.rollback(state, journal, cfg)
     except changes.ChangeConflict as err:
-        say(f"[откат] конфликт: {err}")
+        say(f"✖ конфликт отката: {err}")
         return 6
     return 0
 

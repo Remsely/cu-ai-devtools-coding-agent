@@ -54,7 +54,7 @@ def mark_not_executed(orch: Orchestrator, call_ids: list[str]) -> None:
             name=orch.state.call_name(call_id),
             result=result,
         )
-        say(f"[recovery] {call_id}: не выполнялся до сбоя — помечен NOT_EXECUTED_AFTER_CRASH")
+        say(f"  · вызов {call_id} не выполнялся до сбоя — помечен NOT_EXECUTED")
 
 
 def apply_decision(orch: Orchestrator, call_id: str, choice: str) -> None:
@@ -81,7 +81,7 @@ def apply_decision(orch: Orchestrator, call_id: str, choice: str) -> None:
         # запуску решением пользователя — иначе retry упёрся бы в конфликт дерева.
         if record.side_effect:
             changes.absorb_undefined_effect(state, orch.journal, orch.cfg, call_id)
-        say(f"[recovery] {call_id} ({record.name}): повтор как новая попытка")
+        say(f"  · retry {call_id} ({record.name}) — новая попытка")
         orch.retry_call(call_id)
         return
     if choice == "skip":
@@ -108,7 +108,7 @@ def apply_decision(orch: Orchestrator, call_id: str, choice: str) -> None:
             size=size,
             result=result,
         )
-        say(f"[recovery] {call_id}: помечен неуспешным, работа продолжается")
+        say(f"  · {call_id}: помечен неуспешным, работа продолжается")
         return
     # abort
     orch.journal.append(
@@ -116,7 +116,7 @@ def apply_decision(orch: Orchestrator, call_id: str, choice: str) -> None:
         status="aborted",
         reason=f"пользователь завершил запуск после неопределённого вызова {call_id}",
     )
-    say(f"[recovery] {call_id}: запуск завершён с ошибкой по решению пользователя")
+    say(f"  ✖ запуск завершён по решению пользователя (abort)")
 
 
 def describe_undefined(orch: Orchestrator, call_id: str) -> None:

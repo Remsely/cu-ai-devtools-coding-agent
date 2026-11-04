@@ -151,7 +151,7 @@ def record_change(state, journal, cfg, call_id: str, attribution: str = "action"
     )
     if entries:
         summary = ", ".join(f"{e['change']} {e['path']}" for e in entries)
-        say(f"[изменения] {call_id}: {summary}")
+        say(f"  · изменения: {summary}")
 
 
 def absorb_undefined_effect(state, journal, cfg, call_id: str) -> bool:
@@ -168,7 +168,7 @@ def absorb_undefined_effect(state, journal, cfg, call_id: str) -> bool:
     if current == state.last_tree:
         return False
     record_change(state, journal, cfg, call_id, attribution="undefined_call")
-    say("[recovery] изменения дерева от неопределённого вызова отнесены к запуску")
+    say("  · изменения дерева отнесены к запуску")
     return True
 
 
@@ -233,7 +233,7 @@ def rollback(state, journal, cfg) -> dict:
     aggregated = aggregate_changes(state)
     if not aggregated:
         journal.append(events.ROLLBACK_PERFORMED, restored=[], removed=[])
-        say("[откат] у этого запуска нет изменений файлов")
+        say("· изменений для отката нет")
         return {"restored": [], "removed": [], "note": "изменений не было"}
 
     # Сверка: текущие хеши должны совпадать с итоговыми хешами журнала.
@@ -265,5 +265,5 @@ def rollback(state, journal, cfg) -> dict:
             target.unlink()
             removed.append(path)
     journal.append(events.ROLLBACK_PERFORMED, restored=restored, removed=removed)
-    say(f"[откат] восстановлены: {restored or '—'}; удалены созданные: {removed or '—'}")
+    say(f"✓ откат: восстановлено {restored or '—'}, удалено созданное {removed or '—'}")
     return {"restored": restored, "removed": removed}

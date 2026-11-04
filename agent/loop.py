@@ -134,10 +134,7 @@ class Orchestrator:
             # Уровень 10: исходный снимок дерева в начале фазы исполнения.
             if state.phase == "executing" and state.last_tree is None:
                 changes.save_snapshot(state, self.journal, self.cfg)
-                say(
-                    f"[снапшот] исходное состояние дерева: "
-                    f"{len(state.last_tree or {})} файл(ов)"
-                )
+                say(f"  · снимок дерева: {len(state.last_tree or {})} файлов")
             if not model_request_allowed(state.counters, state.limits):
                 self._finish(
                     "limit_reached",
@@ -151,9 +148,7 @@ class Orchestrator:
             attempts = 0
             while True:
                 self.journal.append(events.BUDGET_DEBITED, kind="model_request")
-                model_name = getattr(self.model, "model", type(self.model).__name__)
-                say("")
-                say(f"[ход {state.turn + 1}] думаю (модель: {model_name})...")
+                say("Думает…")
                 try:
                     reply = self.model.chat(
                         state.messages, tools_for_phase(self.tools, state.phase)
@@ -169,15 +164,13 @@ class Orchestrator:
                     break
                 if attempts >= 2:
                     break
-                say("  (пустой ответ модели — повторяю запрос)")
+                say("  · пустой ответ, повторяю запрос…")
 
             self.journal.append(
                 events.MODEL_RESPONSE, turn=state.turn + 1, message=assistant_message(reply)
             )
             if reply.tool_calls:
                 self._stall_turns = 0
-                for call in reply.tool_calls:
-                    say(f"  агент вызывает: {_fmt_call(call)}")
                 self._handle_batch(reply.tool_calls)
                 continue
 
@@ -185,10 +178,11 @@ class Orchestrator:
                 snippet = reply.text.strip()
                 if len(snippet) > 600:
                     snippet = snippet[:600] + "…"
-                say(f"  агент отвечает: {snippet}")
+                say(f"Ответ: {snippet}")
             if state.phase == "planning" and state.plan is None:
                 if self._register_stall():
                     return state.status
+                say("  · жду план: модель ответила текстом без submit_plan")
                 self.journal.append(
                     events.USER_NOTE,
                     text=(
@@ -203,6 +197,7 @@ class Orchestrator:
                 # статус подтверждает только проверка runtime.
                 if self._register_stall():
                     return state.status
+                say("  · задачи ещё не закрыты — прошу модель продолжить работу")
                 current = state.current_task_id or "—"
                 pending = ", ".join(t.id for t in open_tasks)
                 self.journal.append(
@@ -226,13 +221,13 @@ class Orchestrator:
             + "\n".join(plan_summary_lines(state.plan))
         )
         self.journal.append(events.PLAN_APPROVED, text=text)
-        say("[план] утверждён пользователем — начинается исполнение")
+        say("✓ план утверждён — начинается исполнение")
         # Уровень 9: шаги плана становятся задачами runtime.
         tasks.on_plan_approved(state, self.journal)
 
     def reject_plan(self, reason: str = "") -> None:
         self.journal.append(events.PLAN_REJECTED, reason=reason)
-        say("[план] отклонён пользователем")
+        say("✖ план отклонён")
 
     def retry_call(self, call_id: str) -> None:
         """Явный повтор неопределённого вызова: новая попытка того же tool call."""
@@ -266,7 +261,7 @@ class Orchestrator:
                     self.journal.append(
                         events.TOOL_CALL_REPLAYED, id=call.id, result=record.last_result
                     )
-                    say(f"[tool {call.id}] повторный запрос — возвращён сохранённый результат")
+                    say(f"  → {_fmt_call(call)}  [повтор: сохранённый результат]")
                     continue
                 self._refuse(
                     call,
@@ -354,6 +349,7 @@ class Orchestrator:
             task_id=state.current_task_id,
         )
         self._failpoint("after_start", call)
+        say(f"  → {_fmt_call(call)}")
 
         if call.name == PLAN_TOOL:
             self._execute_submit_plan(call, attempt)
@@ -407,12 +403,9 @@ class Orchestrator:
             size=debited,
             result=result,
         )
-        note = ", вывод обрезан" if truncated else ""
-        if ok:
-            say(f"[tool {call.id}] {call.name} → ok{note}")
-        else:
-            code = result.get("error", {}).get("code", "?")
-            say(f"[tool {call.id}] {call.name} → ошибка {code}{note}")
+        if not ok:
+            error = result.get("error", {})
+            say(f"      ⚠ {error.get('code', '?')}: {error.get('message', '')[:80]}")
 
     def _execute_submit_plan(self, call: ToolCallRequest, attempt: int) -> None:
         raw_plan = (call.arguments or {}).get("plan")
@@ -445,7 +438,8 @@ class Orchestrator:
         )
         if plan is not None:
             self.journal.append(events.PLAN_SAVED, plan=plan)
-            say("[план] сохранён, ожидает утверждения:")
+            say("")
+            say("План сохранён — ожидает утверждения:")
             for line in plan_summary_lines(plan):
                 say("    " + line)
 
@@ -462,7 +456,8 @@ class Orchestrator:
             args_json=_args_json(call),
             result=result,
         )
-        say(f"[tool {call.id}] {call.name} → отказ {code}: {message}")
+        say(f"  → {_fmt_call(call)}  [отклонено: {code}]")
+        say(f"      {message[:90]}")
 
     def _failpoint(self, name: str, call: ToolCallRequest) -> None:
         failpoint = self.cfg.failpoint
@@ -505,4 +500,6 @@ class Orchestrator:
         if final_answer is not None:
             payload["final_answer"] = final_answer
         self.journal.append(events.RUN_FINISHED, **payload)
-        say(f"[статус] {status}" + (f" ({reason})" if reason else ""))
+        if status != "completed":
+            # Итог успешного запуска печатает вызывающая сторона (CLI/чат).
+            say(f"✖ {status}" + (f" ({reason})" if reason else ""))
