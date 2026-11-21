@@ -1,0 +1,67 @@
+{
+  "task_id": "quantity",
+  "variant": "baseline",
+  "run_id": "r20261121-170921-2089",
+  "agent_status": "completed",
+  "error": null,
+  "grade": {
+    "status": "pass",
+    "checks": [
+      {
+        "name": "line_total:(12.5, 3)",
+        "passed": true
+      },
+      {
+        "name": "line_total:(12.5, 0)",
+        "passed": true
+      },
+      {
+        "name": "line_total:(0, 5)",
+        "passed": true
+      },
+      {
+        "name": "line_total:(0.1, 3)",
+        "passed": true
+      },
+      {
+        "name": "line_total:(5, 1)",
+        "passed": true
+      },
+      {
+        "name": "reject_quantity:(-0.01, 2)",
+        "passed": true
+      },
+      {
+        "name": "reject_quantity:(10, -1)",
+        "passed": true
+      },
+      {
+        "name": "reject_quantity:(10, 1.5)",
+        "passed": true
+      },
+      {
+        "name": "reject_quantity:(10, True)",
+        "passed": true
+      },
+      {
+        "name": "reject_quantity:(10, False)",
+        "passed": true
+      }
+    ],
+    "captured_output": ""
+  },
+  "success": true,
+  "success_definition": "Независимая проверка артефакта пройдена; ограничений не нарушено.",
+  "agent_completed": true,
+  "externally_interrupted": false,
+  "agent_elapsed_s": 31.14,
+  "full_time_s": 31.721,
+  "model_requests": 12,
+  "tool_calls": 12,
+  "tokens": null,
+  "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+  "changed_paths": [
+    "order.py"
+  ],
+  "restriction_violations": []
+}

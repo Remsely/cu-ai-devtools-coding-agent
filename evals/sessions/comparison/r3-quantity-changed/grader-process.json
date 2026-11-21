@@ -1,0 +1,10 @@
+{
+  "command": "independent_grader",
+  "cwd": ".",
+  "exit_code": 0,
+  "timed_out": false,
+  "duration_s": 0.572,
+  "stdout": "{\"status\": \"pass\", \"checks\": [{\"name\": \"line_total:(12.5, 3)\", \"passed\": true}, {\"name\": \"line_total:(12.5, 0)\", \"passed\": true}, {\"name\": \"line_total:(0, 5)\", \"passed\": true}, {\"name\": \"line_total:(0.1, 3)\", \"passed\": true}, {\"name\": \"line_total:(5, 1)\", \"passed\": true}, {\"name\": \"reject_quantity:(-0.01, 2)\", \"passed\": true}, {\"name\": \"reject_quantity:(10, -1)\", \"passed\": true}, {\"name\": \"reject_quantity:(10, 1.5)\", \"passed\": true}, {\"name\": \"reject_quantity:(10, True)\", \"passed\": true}, {\"name\": \"reject_quantity:(10, False)\", \"passed\": true}], \"captured_output\": \"\"}\n",
+  "stderr": "",
+  "truncated": false
+}

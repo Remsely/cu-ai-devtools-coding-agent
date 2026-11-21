@@ -1,0 +1,92 @@
+{
+  "phase": "compare",
+  "schedule": [
+    {
+      "label": "r1-shipping-baseline",
+      "task": "shipping",
+      "variant": "baseline"
+    },
+    {
+      "label": "r1-shipping-changed",
+      "task": "shipping",
+      "variant": "changed"
+    },
+    {
+      "label": "r1-quantity-changed",
+      "task": "quantity",
+      "variant": "changed"
+    },
+    {
+      "label": "r1-quantity-baseline",
+      "task": "quantity",
+      "variant": "baseline"
+    },
+    {
+      "label": "r2-shipping-changed",
+      "task": "shipping",
+      "variant": "changed"
+    },
+    {
+      "label": "r2-shipping-baseline",
+      "task": "shipping",
+      "variant": "baseline"
+    },
+    {
+      "label": "r2-quantity-baseline",
+      "task": "quantity",
+      "variant": "baseline"
+    },
+    {
+      "label": "r2-quantity-changed",
+      "task": "quantity",
+      "variant": "changed"
+    },
+    {
+      "label": "r3-shipping-baseline",
+      "task": "shipping",
+      "variant": "baseline"
+    },
+    {
+      "label": "r3-shipping-changed",
+      "task": "shipping",
+      "variant": "changed"
+    },
+    {
+      "label": "r3-quantity-changed",
+      "task": "quantity",
+      "variant": "changed"
+    },
+    {
+      "label": "r3-quantity-baseline",
+      "task": "quantity",
+      "variant": "baseline"
+    }
+  ],
+  "image": "python:3.12-slim",
+  "timeout_s": 600,
+  "instruction": "При проектировании verification используй expect_exit_code=0: успешная проверка должна завершаться с нулевым кодом. Проверяя ожидаемый ValueError, запускай существующие unittest-тесты с assertRaises (например, python -m unittest -v): тест сам подтверждает исключение и завершается успешно. Не используй необработанное ожидаемое исключение в python -c как проверку с произвольно выбранным ненулевым кодом выхода.\n",
+  "harness_hashes": {
+    "__init__.py": "20dcc69cf8d96c6ec61328420e51bcf17ebed9b25f6bf326758235fe6579ffe1",
+    "__main__.py": "cca7172e64540c48c778314be105d62c67a8e8e10b39be4f55f0d7ebe33b0d4a",
+    "budget.py": "5d367c54d7fe66819aae1d53b1855df8e5e0c5b650a82445f44385f3daf78e1c",
+    "changes.py": "ed13199f60f40fc6815f5f7705d686ea16e73759578415d4e80f3c30f4837d0f",
+    "cli.py": "7eecc0ac4638ba17a35d67968c4251bb752c7934771c57e7ee5fd7e7c32da464",
+    "config.py": "d3a958a30e47f361a906281ee58206932592ecbdb5a9cd32916787e2fe2a9166",
+    "events.py": "73b4b76593b895b30b447fb71cfea0d074341537fcdc64b3c79ddaa120a20c24",
+    "llm.py": "2ae4e3db5789a748e1f4287afdd6e0c03cc43e3d48439c0c6eb6861de68b069a",
+    "loop.py": "edb9f4cd66331174ca23a665214388af2ad73a3efa16b4172be6f52b262e14d2",
+    "planning.py": "9884a4da8355fd5064b4e401bad21a0549dc5d1395e0b463285ec940242b0c5e",
+    "recovery.py": "b4f31887be8e422749bf9865714be85aa78a8781619debcbc57ed4560e5af484",
+    "state.py": "34625899ccb826ab26ec0f55102d6d6518da73dc3565f8b69ae1a777edd16a13",
+    "tasks.py": "5e4b0e6076aac1a9b295d5d7a56d0e7b9e846f837bbb3977287c74bbbfeb8258",
+    "tools/__init__.py": "ae551a96df50a731c10194a9f5e82c81824ff208ec8fe827841c5afe62e02969",
+    "tools/base.py": "e4c117b883baf60efc9fc080da11f9b672efd31f588693a0d09977515620070f",
+    "tools/bash.py": "3f4724b45eb561ae128756ab5c2337d456bdb8f2843e00d1672710ba550bdaf2",
+    "tools/fs.py": "a12ecc134fbbce0e447aa4715e4caba974506e866cd6d7d018446b1fbb24da55",
+    "tools/plan_tool.py": "f79993adf296ffd7b97abddb43406601a2c4864cd5ef4d7b5497b7c2ea73a47b",
+    "tools/task_tool.py": "a06a219bbc2cb4815e925961a520931d09a846f61a3b8b081d960b2ec4c0b7fe"
+  },
+  "batch_sha256": "0c8381dc3629682ea5e1fdbdc964ccedbc78cab66c03dd7852c3c92139b126b2",
+  "status": "completed",
+  "completed_trials": 12
+}

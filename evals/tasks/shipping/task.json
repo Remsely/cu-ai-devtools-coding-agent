@@ -1,0 +1,6 @@
+{
+  "id": "shipping",
+  "title": "Порог бесплатной доставки",
+  "task": "Исправь calculate_shipping в order.py. Для неотрицательной суммы subtotal доставка бесплатна, когда subtotal >= free_from; иначе стоимость доставки равна fee. Значения по умолчанию: free_from=100, fee=10. Отрицательные subtotal, free_from или fee должны вызывать ValueError. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+  "allowed_changes": ["order.py"]
+}

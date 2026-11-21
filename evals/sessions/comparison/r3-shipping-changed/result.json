@@ -1,0 +1,67 @@
+{
+  "task_id": "shipping",
+  "variant": "changed",
+  "run_id": "r20261121-170748-1ad2",
+  "agent_status": "completed",
+  "error": null,
+  "grade": {
+    "status": "pass",
+    "checks": [
+      {
+        "name": "shipping:(99,)",
+        "passed": true
+      },
+      {
+        "name": "shipping:(100,)",
+        "passed": true
+      },
+      {
+        "name": "shipping:(101,)",
+        "passed": true
+      },
+      {
+        "name": "shipping:(0,)",
+        "passed": true
+      },
+      {
+        "name": "shipping:(0, 0, 7)",
+        "passed": true
+      },
+      {
+        "name": "shipping:(49.5, 50, 3.5)",
+        "passed": true
+      },
+      {
+        "name": "shipping:(50, 50, 3.5)",
+        "passed": true
+      },
+      {
+        "name": "reject_shipping:(-0.01,)",
+        "passed": true
+      },
+      {
+        "name": "reject_shipping:(10, -0.01)",
+        "passed": true
+      },
+      {
+        "name": "reject_shipping:(10, 100, -0.01)",
+        "passed": true
+      }
+    ],
+    "captured_output": ""
+  },
+  "success": true,
+  "success_definition": "Независимая проверка артефакта пройдена; ограничений не нарушено.",
+  "agent_completed": true,
+  "externally_interrupted": false,
+  "agent_elapsed_s": 36.471,
+  "full_time_s": 37.056,
+  "model_requests": 12,
+  "tool_calls": 12,
+  "tokens": null,
+  "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+  "changed_paths": [
+    "order.py"
+  ],
+  "restriction_violations": []
+}

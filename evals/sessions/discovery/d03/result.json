@@ -1,0 +1,55 @@
+{
+  "task_id": "discount",
+  "variant": "baseline",
+  "run_id": "r20261121-165116-48c0",
+  "agent_status": "completed",
+  "error": null,
+  "grade": {
+    "status": "pass",
+    "checks": [
+      {
+        "name": "total:[100, 50]:10",
+        "passed": true
+      },
+      {
+        "name": "total:[]:25",
+        "passed": true
+      },
+      {
+        "name": "total:[12.5, 7.5]:12.5",
+        "passed": true
+      },
+      {
+        "name": "total:[100]:0",
+        "passed": true
+      },
+      {
+        "name": "total:[100]:100",
+        "passed": true
+      },
+      {
+        "name": "reject_discount:-0.01",
+        "passed": true
+      },
+      {
+        "name": "reject_discount:100.01",
+        "passed": true
+      }
+    ],
+    "captured_output": ""
+  },
+  "success": true,
+  "success_definition": "Независимая проверка артефакта пройдена; ограничений не нарушено.",
+  "agent_completed": true,
+  "externally_interrupted": false,
+  "agent_elapsed_s": 40.217,
+  "full_time_s": 40.773,
+  "model_requests": 13,
+  "tool_calls": 13,
+  "tokens": null,
+  "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+  "changed_paths": [
+    "order.py"
+  ],
+  "restriction_violations": []
+}

@@ -1,0 +1,4101 @@
+{
+  "schema_version": "1.0",
+  "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison",
+  "runs": [
+    {
+      "source": "r1-quantity-baseline",
+      "task_id": "quantity",
+      "variant": "baseline",
+      "run_id": "r20261121-165929-ce60",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "line_total:(12.5, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(12.5, 0)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0, 5)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0.1, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(5, 1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(-0.01, 2)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, -1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, 1.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, True)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, False)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 80.362,
+      "tool_calls": 21,
+      "model_requests": 21,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 5,
+      "repeat_episodes": 2,
+      "failed_executions": 10,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r1-quantity-baseline/trace/r20261121-165929-ce60/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-quantity-baseline\\trace\\r20261121-165929-ce60\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 1,
+          "executions": 14,
+          "failed_executions": 10,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 2,
+          "repeated_failures": 5,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-165929-ce60",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-quantity-baseline\\trace\\r20261121-165929-ce60\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-quantity-baseline\\workspace",
+            "task": "Исправь calculate_line_total в order.py. Стоимость строки равна unit_price * quantity. Цена должна быть неотрицательной, quantity — неотрицательное целое число; bool не считается целым количеством. Невалидная цена или количество вызывают ValueError. При нулевом количестве результат 0. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_wrztkavp",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 3) == 37.5; assert calculate_line_total(10, 0) == 0\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_blegxte3",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                  "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                },
+                "start": {
+                  "seq": 37,
+                  "line": 37
+                },
+                "result": {
+                  "seq": 40,
+                  "line": 40
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_hk51q8t3",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                  "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                },
+                "start": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "result": {
+                  "seq": 44,
+                  "line": 44
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_26iteid2",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; for args in ((-1, 2), (10, -1), (10, 1.5), (10, True)): try: calculate_line_total(*args); assert False, f'{args} did not raise ValueError' except ValueError: pass\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "  File \"<string>\", line 1\n    from order import calculate_line_total; for args in ((-1, 2), (10, -1), (10, 1.5), (10, True)): try: calculate_line_total(*args); assert False, f'{args} did not raise ValueError' except ValueError: pass\n                                            ^^^\nSyntaxError: invalid syntax\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "File \"<string>\", line 1\n    from order import calculate_line_total; for args in ((-1, 2), (10, -1), (10, 1.5), (10, True)): try: calculate_line_total(*args); assert False, f'{args} did not raise ValueError' except ValueError: pass\n                                            ^^^\nSyntaxError: invalid syntax",
+                  "sha256": "ec3d769a4b747a15fc45c72d6d28300469dd7d05697b2a525f7a4e6dc528ebed"
+                },
+                "start": {
+                  "seq": 47,
+                  "line": 47
+                },
+                "result": {
+                  "seq": 48,
+                  "line": 48
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_gcxyvv7f",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... FAIL\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n======================================================================\nFAIL: test_invalid_inputs (test_order.OrderTest.test_invalid_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 15, in test_invalid_inputs\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=1)\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... FAIL\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n======================================================================\nFAIL: test_invalid_inputs (test_order.OrderTest.test_invalid_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 15, in test_invalid_inputs\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nFAILED (failures=1)",
+                  "sha256": "cc860aede0c3c3dae18521180362309515c260f5df0bac0ed4a18b4630a0cd49"
+                },
+                "start": {
+                  "seq": 55,
+                  "line": 55
+                },
+                "result": {
+                  "seq": 58,
+                  "line": 58
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_32vwi598",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 67,
+                  "line": 67
+                },
+                "result": {
+                  "seq": 70,
+                  "line": 70
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_s497ymei",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                  "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                },
+                "start": {
+                  "seq": 73,
+                  "line": 73
+                },
+                "result": {
+                  "seq": 74,
+                  "line": 74
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_bwrpjjz3",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; for args in ((-1, 2), (10, -1), (10, 1.5), (10, True)): try: calculate_line_total(*args); assert False except ValueError: pass\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "  File \"<string>\", line 1\n    from order import calculate_line_total; for args in ((-1, 2), (10, -1), (10, 1.5), (10, True)): try: calculate_line_total(*args); assert False except ValueError: pass\n                                            ^^^\nSyntaxError: invalid syntax\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "File \"<string>\", line 1\n    from order import calculate_line_total; for args in ((-1, 2), (10, -1), (10, 1.5), (10, True)): try: calculate_line_total(*args); assert False except ValueError: pass\n                                            ^^^\nSyntaxError: invalid syntax",
+                  "sha256": "a153886bd6f452efbaeaebae2cf496ca1152944b33e5676ba80f6ecf34232d78"
+                },
+                "start": {
+                  "seq": 77,
+                  "line": 77
+                },
+                "result": {
+                  "seq": 78,
+                  "line": 78
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_9zepf9bi",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 2,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                "signature": {
+                  "exit_code": 2,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                  "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                },
+                "start": {
+                  "seq": 81,
+                  "line": 81
+                },
+                "result": {
+                  "seq": 82,
+                  "line": 82
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_u0vq0cuy",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 2,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                "signature": {
+                  "exit_code": 2,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                  "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                },
+                "start": {
+                  "seq": 85,
+                  "line": 85
+                },
+                "result": {
+                  "seq": 86,
+                  "line": 86
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_svfj7lsw",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 2,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                "signature": {
+                  "exit_code": 2,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                  "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                },
+                "start": {
+                  "seq": 89,
+                  "line": 89
+                },
+                "result": {
+                  "seq": 90,
+                  "line": 90
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_5wsyp1su",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 2,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                "signature": {
+                  "exit_code": 2,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                  "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                },
+                "start": {
+                  "seq": 93,
+                  "line": 93
+                },
+                "result": {
+                  "seq": 94,
+                  "line": 94
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_tj8jmwas",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest test_order.OrderTest.test_invalid_inputs -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 97,
+                  "line": 97
+                },
+                "result": {
+                  "seq": 98,
+                  "line": 98
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_u34lowlw",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 104,
+                  "line": 104
+                },
+                "result": {
+                  "seq": 105,
+                  "line": 105
+                },
+                "task_id": "t3"
+              }
+            ],
+            "findings": [
+              {
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                "cwd": ".",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                  "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                },
+                "occurrences": [
+                  {
+                    "call_id": "call_blegxte3",
+                    "attempt": 1,
+                    "tool": "Bash",
+                    "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 1,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                    "signature": {
+                      "exit_code": 1,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                      "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                    },
+                    "start": {
+                      "seq": 37,
+                      "line": 37
+                    },
+                    "result": {
+                      "seq": 40,
+                      "line": 40
+                    },
+                    "task_id": "t2"
+                  },
+                  {
+                    "call_id": "call_hk51q8t3",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 1,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                    "signature": {
+                      "exit_code": 1,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                      "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                    },
+                    "start": {
+                      "seq": 43,
+                      "line": 43
+                    },
+                    "result": {
+                      "seq": 44,
+                      "line": 44
+                    },
+                    "task_id": "t2"
+                  },
+                  {
+                    "call_id": "call_s497ymei",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 1,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                    "signature": {
+                      "exit_code": 1,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                      "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                    },
+                    "start": {
+                      "seq": 73,
+                      "line": 73
+                    },
+                    "result": {
+                      "seq": 74,
+                      "line": 74
+                    },
+                    "task_id": "t2"
+                  }
+                ],
+                "repeat_count": 2,
+                "between": [
+                  {
+                    "from": {
+                      "seq": 40,
+                      "line": 40
+                    },
+                    "to": {
+                      "seq": 43,
+                      "line": 43
+                    },
+                    "actions": [],
+                    "changes": []
+                  },
+                  {
+                    "from": {
+                      "seq": 44,
+                      "line": 44
+                    },
+                    "to": {
+                      "seq": 73,
+                      "line": 73
+                    },
+                    "actions": [
+                      {
+                        "seq": 47,
+                        "line": 47,
+                        "call_id": "call_26iteid2",
+                        "attempt": 1,
+                        "tool": "complete_task",
+                        "arguments": {
+                          "task_id": "t2",
+                          "verification_command": "python -c \"from order import calculate_line_total; for args in ((-1, 2), (10, -1), (10, 1.5), (10, True)): try: calculate_line_total(*args); assert False, f'{args} did not raise ValueError' except ValueError: pass\""
+                        }
+                      },
+                      {
+                        "seq": 51,
+                        "line": 51,
+                        "call_id": "call_grb9arvn",
+                        "attempt": 1,
+                        "tool": "read_file",
+                        "arguments": {
+                          "path": "order.py"
+                        }
+                      },
+                      {
+                        "seq": 55,
+                        "line": 55,
+                        "call_id": "call_gcxyvv7f",
+                        "attempt": 1,
+                        "tool": "Bash",
+                        "arguments": {
+                          "command": "python -m unittest -v"
+                        }
+                      },
+                      {
+                        "seq": 61,
+                        "line": 61,
+                        "call_id": "call_u9ayxcz9",
+                        "attempt": 1,
+                        "tool": "write_file",
+                        "arguments": {
+                          "path": "order.py"
+                        }
+                      },
+                      {
+                        "seq": 67,
+                        "line": 67,
+                        "call_id": "call_32vwi598",
+                        "attempt": 1,
+                        "tool": "Bash",
+                        "arguments": {
+                          "command": "python -m unittest -v"
+                        }
+                      }
+                    ],
+                    "changes": [
+                      {
+                        "seq": 63,
+                        "line": 63,
+                        "call_id": "call_u9ayxcz9",
+                        "path": "order.py",
+                        "change": "modified",
+                        "before_hash": "8a9b9bd275f5cbca",
+                        "after_hash": "e26ab6b9799907bf"
+                      }
+                    ]
+                  }
+                ],
+                "interpretation": "Команда повторно дала тот же сохранённый неуспешный результат. Причина ошибки и полезность повторов требуют отдельной проверки."
+              },
+              {
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                "cwd": ".",
+                "signature": {
+                  "exit_code": 2,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                  "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                },
+                "occurrences": [
+                  {
+                    "call_id": "call_9zepf9bi",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 2,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                    "signature": {
+                      "exit_code": 2,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                      "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                    },
+                    "start": {
+                      "seq": 81,
+                      "line": 81
+                    },
+                    "result": {
+                      "seq": 82,
+                      "line": 82
+                    },
+                    "task_id": "t2"
+                  },
+                  {
+                    "call_id": "call_u0vq0cuy",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 2,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                    "signature": {
+                      "exit_code": 2,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                      "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                    },
+                    "start": {
+                      "seq": 85,
+                      "line": 85
+                    },
+                    "result": {
+                      "seq": 86,
+                      "line": 86
+                    },
+                    "task_id": "t2"
+                  },
+                  {
+                    "call_id": "call_svfj7lsw",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 2,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                    "signature": {
+                      "exit_code": 2,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                      "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                    },
+                    "start": {
+                      "seq": 89,
+                      "line": 89
+                    },
+                    "result": {
+                      "seq": 90,
+                      "line": 90
+                    },
+                    "task_id": "t2"
+                  },
+                  {
+                    "call_id": "call_5wsyp1su",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1 | grep -q 'ValueError' && echo OK\"",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 2,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                    "signature": {
+                      "exit_code": 2,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                      "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                    },
+                    "start": {
+                      "seq": 93,
+                      "line": 93
+                    },
+                    "result": {
+                      "seq": 94,
+                      "line": 94
+                    },
+                    "task_id": "t2"
+                  }
+                ],
+                "repeat_count": 3,
+                "between": [
+                  {
+                    "from": {
+                      "seq": 82,
+                      "line": 82
+                    },
+                    "to": {
+                      "seq": 85,
+                      "line": 85
+                    },
+                    "actions": [],
+                    "changes": []
+                  },
+                  {
+                    "from": {
+                      "seq": 86,
+                      "line": 86
+                    },
+                    "to": {
+                      "seq": 89,
+                      "line": 89
+                    },
+                    "actions": [],
+                    "changes": []
+                  },
+                  {
+                    "from": {
+                      "seq": 90,
+                      "line": 90
+                    },
+                    "to": {
+                      "seq": 93,
+                      "line": 93
+                    },
+                    "actions": [],
+                    "changes": []
+                  }
+                ],
+                "interpretation": "Команда повторно дала тот же сохранённый неуспешный результат. Причина ошибки и полезность повторов требуют отдельной проверки."
+              }
+            ],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r1-quantity-changed",
+      "task_id": "quantity",
+      "variant": "changed",
+      "run_id": "r20261121-165823-f6e9",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "line_total:(12.5, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(12.5, 0)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0, 5)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0.1, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(5, 1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(-0.01, 2)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, -1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, 1.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, True)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, False)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 65.592,
+      "tool_calls": 21,
+      "model_requests": 21,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 3,
+      "repeat_episodes": 1,
+      "failed_executions": 5,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r1-quantity-changed/trace/r20261121-165823-f6e9/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-quantity-changed\\trace\\r20261121-165823-f6e9\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 1,
+          "executions": 15,
+          "failed_executions": 5,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 1,
+          "repeated_failures": 3,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-165823-f6e9",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-quantity-changed\\trace\\r20261121-165823-f6e9\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-quantity-changed\\workspace",
+            "task": "Исправь calculate_line_total в order.py. Стоимость строки равна unit_price * quantity. Цена должна быть неотрицательной, quantity — неотрицательное целое число; bool не считается целым количеством. Невалидная цена или количество вызывают ValueError. При нулевом количестве результат 0. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_jnnf2bf1",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 3) == 37.5\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 33,
+                  "line": 33
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_so1o64ab",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 0) == 0\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 36,
+                  "line": 36
+                },
+                "result": {
+                  "seq": 39,
+                  "line": 39
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_grwz0vsy",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; calculate_line_total(10, True)\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 42,
+                  "line": 42
+                },
+                "result": {
+                  "seq": 45,
+                  "line": 45
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_97g7thxh",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; try: calculate_line_total(10, True); print('No error'); except ValueError: print('ValueError raised')\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "  File \"<string>\", line 1\n    from order import calculate_line_total; try: calculate_line_total(10, True); print('No error'); except ValueError: print('ValueError raised')\n                                            ^^^\nSyntaxError: invalid syntax\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "File \"<string>\", line 1\n    from order import calculate_line_total; try: calculate_line_total(10, True); print('No error'); except ValueError: print('ValueError raised')\n                                            ^^^\nSyntaxError: invalid syntax",
+                  "sha256": "c416a67f15a9e8bc6cc25f55292ba4fa2ce151a41488ff1ef1d5eb25795fb37a"
+                },
+                "start": {
+                  "seq": 54,
+                  "line": 54
+                },
+                "result": {
+                  "seq": 57,
+                  "line": 57
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_33xhtxve",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; try: calculate_line_total(10, True); print('No error'); except ValueError: print('ValueError raised')\" 2>&1 || echo \"Exit code: $?\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "  File \"<string>\", line 1\n    from order import calculate_line_total; try: calculate_line_total(10, True); print('No error'); except ValueError: print('ValueError raised')\n                                            ^^^\nSyntaxError: invalid syntax\nExit code: 1\n",
+                "signature": null,
+                "start": {
+                  "seq": 60,
+                  "line": 60
+                },
+                "result": {
+                  "seq": 63,
+                  "line": 63
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_ekgnebpd",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python << 'EOF'\nfrom order import calculate_line_total\ntry:\n    calculate_line_total(10, True)\n    print(\"No error\")\nexcept ValueError:\n    print(\"ValueError raised for bool\")\nEOF",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "ValueError raised for bool\n",
+                "signature": null,
+                "start": {
+                  "seq": 66,
+                  "line": 66
+                },
+                "result": {
+                  "seq": 69,
+                  "line": 69
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_a6z8u4cp",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 72,
+                  "line": 72
+                },
+                "result": {
+                  "seq": 75,
+                  "line": 75
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_yki8msw1",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 3) == 37.5\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 78,
+                  "line": 78
+                },
+                "result": {
+                  "seq": 79,
+                  "line": 79
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_uhanw0ra",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 0) == 0\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 85,
+                  "line": 85
+                },
+                "result": {
+                  "seq": 86,
+                  "line": 86
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_7izsjv6a",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\" 2>&1; echo \"Exit code: $?\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"Invalid inputs\")\nValueError: Invalid inputs\nExit code: 1\n",
+                "signature": null,
+                "start": {
+                  "seq": 92,
+                  "line": 92
+                },
+                "result": {
+                  "seq": 95,
+                  "line": 95
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_sefjo3fx",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 0,
+                "expected_exit_code": 1,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": {
+                  "exit_code": 0,
+                  "expected_exit_code": 1,
+                  "timed_out": false,
+                  "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                  "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                },
+                "start": {
+                  "seq": 98,
+                  "line": 98
+                },
+                "result": {
+                  "seq": 99,
+                  "line": 99
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_ey2zh1ri",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 0,
+                "expected_exit_code": 1,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": {
+                  "exit_code": 0,
+                  "expected_exit_code": 1,
+                  "timed_out": false,
+                  "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                  "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                },
+                "start": {
+                  "seq": 102,
+                  "line": 102
+                },
+                "result": {
+                  "seq": 103,
+                  "line": 103
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_jzd1zvjn",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 0,
+                "expected_exit_code": 1,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": {
+                  "exit_code": 0,
+                  "expected_exit_code": 1,
+                  "timed_out": false,
+                  "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                  "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                },
+                "start": {
+                  "seq": 106,
+                  "line": 106
+                },
+                "result": {
+                  "seq": 107,
+                  "line": 107
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_vdgoyy6a",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 0,
+                "expected_exit_code": 1,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": {
+                  "exit_code": 0,
+                  "expected_exit_code": 1,
+                  "timed_out": false,
+                  "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                  "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                },
+                "start": {
+                  "seq": 110,
+                  "line": 110
+                },
+                "result": {
+                  "seq": 111,
+                  "line": 111
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_d389939z",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 1,
+                "expected_exit_code": 1,
+                "timed_out": false,
+                "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"Invalid inputs\")\nValueError: Invalid inputs\n",
+                "signature": null,
+                "start": {
+                  "seq": 114,
+                  "line": 114
+                },
+                "result": {
+                  "seq": 115,
+                  "line": 115
+                },
+                "task_id": "t3"
+              }
+            ],
+            "findings": [
+              {
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "signature": {
+                  "exit_code": 0,
+                  "expected_exit_code": 1,
+                  "timed_out": false,
+                  "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                  "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                },
+                "occurrences": [
+                  {
+                    "call_id": "call_sefjo3fx",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 0,
+                    "expected_exit_code": 1,
+                    "timed_out": false,
+                    "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "signature": {
+                      "exit_code": 0,
+                      "expected_exit_code": 1,
+                      "timed_out": false,
+                      "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                      "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                    },
+                    "start": {
+                      "seq": 98,
+                      "line": 98
+                    },
+                    "result": {
+                      "seq": 99,
+                      "line": 99
+                    },
+                    "task_id": "t3"
+                  },
+                  {
+                    "call_id": "call_ey2zh1ri",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 0,
+                    "expected_exit_code": 1,
+                    "timed_out": false,
+                    "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "signature": {
+                      "exit_code": 0,
+                      "expected_exit_code": 1,
+                      "timed_out": false,
+                      "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                      "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                    },
+                    "start": {
+                      "seq": 102,
+                      "line": 102
+                    },
+                    "result": {
+                      "seq": 103,
+                      "line": 103
+                    },
+                    "task_id": "t3"
+                  },
+                  {
+                    "call_id": "call_jzd1zvjn",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 0,
+                    "expected_exit_code": 1,
+                    "timed_out": false,
+                    "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "signature": {
+                      "exit_code": 0,
+                      "expected_exit_code": 1,
+                      "timed_out": false,
+                      "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                      "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                    },
+                    "start": {
+                      "seq": 106,
+                      "line": 106
+                    },
+                    "result": {
+                      "seq": 107,
+                      "line": 107
+                    },
+                    "task_id": "t3"
+                  },
+                  {
+                    "call_id": "call_vdgoyy6a",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 0,
+                    "expected_exit_code": 1,
+                    "timed_out": false,
+                    "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                    "signature": {
+                      "exit_code": 0,
+                      "expected_exit_code": 1,
+                      "timed_out": false,
+                      "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+                      "sha256": "2c1288e35eca5c9de466ec61edf57bd364b7a05e841bc7141f44d29e52e319cc"
+                    },
+                    "start": {
+                      "seq": 110,
+                      "line": 110
+                    },
+                    "result": {
+                      "seq": 111,
+                      "line": 111
+                    },
+                    "task_id": "t3"
+                  }
+                ],
+                "repeat_count": 3,
+                "between": [
+                  {
+                    "from": {
+                      "seq": 99,
+                      "line": 99
+                    },
+                    "to": {
+                      "seq": 102,
+                      "line": 102
+                    },
+                    "actions": [],
+                    "changes": []
+                  },
+                  {
+                    "from": {
+                      "seq": 103,
+                      "line": 103
+                    },
+                    "to": {
+                      "seq": 106,
+                      "line": 106
+                    },
+                    "actions": [],
+                    "changes": []
+                  },
+                  {
+                    "from": {
+                      "seq": 107,
+                      "line": 107
+                    },
+                    "to": {
+                      "seq": 110,
+                      "line": 110
+                    },
+                    "actions": [],
+                    "changes": []
+                  }
+                ],
+                "interpretation": "Команда повторно дала тот же сохранённый неуспешный результат. Причина ошибки и полезность повторов требуют отдельной проверки."
+              }
+            ],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r1-shipping-baseline",
+      "task_id": "shipping",
+      "variant": "baseline",
+      "run_id": "r20261121-165236-1815",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "shipping:(99,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(100,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(101,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0, 0, 7)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(49.5, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(50, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(-0.01,)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, -0.01)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, 100, -0.01)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "failed",
+      "agent_completed": false,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": "ошибка API модели: модель недоступна: timed out",
+      "full_time_s": 317.236,
+      "tool_calls": 6,
+      "model_requests": 6,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 0,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r1-shipping-baseline/trace/r20261121-165236-1815/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-shipping-baseline\\trace\\r20261121-165236-1815\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 1,
+          "failed_executions": 0,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-165236-1815",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-shipping-baseline\\trace\\r20261121-165236-1815\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-shipping-baseline\\workspace",
+            "task": "Исправь calculate_shipping в order.py. Для неотрицательной суммы subtotal доставка бесплатна, когда subtotal >= free_from; иначе стоимость доставки равна fee. Значения по умолчанию: free_from=100, fee=10. Отрицательные subtotal, free_from или fee должны вызывать ValueError. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "failed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_dg21zr6a",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_shipping; assert calculate_shipping(99) == 10; assert calculate_shipping(100) == 0; assert calculate_shipping(50, free_from=50, fee=7) == 0\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r1-shipping-changed",
+      "task_id": "shipping",
+      "variant": "changed",
+      "run_id": "r20261121-165754-da81",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "shipping:(99,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(100,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(101,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0, 0, 7)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(49.5, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(50, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(-0.01,)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, -0.01)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, 100, -0.01)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 29.928,
+      "tool_calls": 12,
+      "model_requests": 12,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 1,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r1-shipping-changed/trace/r20261121-165754-da81/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-shipping-changed\\trace\\r20261121-165754-da81\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 7,
+          "failed_executions": 1,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-165754-da81",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-shipping-changed\\trace\\r20261121-165754-da81\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r1-shipping-changed\\workspace",
+            "task": "Исправь calculate_shipping в order.py. Для неотрицательной суммы subtotal доставка бесплатна, когда subtotal >= free_from; иначе стоимость доставки равна fee. Значения по умолчанию: free_from=100, fee=10. Отрицательные subtotal, free_from или fee должны вызывать ValueError. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_227k8l8i",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... FAIL\ntest_negative_values (test_order.OrderTest.test_negative_values) ... FAIL\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... FAIL\n\n======================================================================\nFAIL: test_custom_threshold (test_order.OrderTest.test_custom_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 14, in test_custom_threshold\n    self.assertEqual(calculate_shipping(50, free_from=50, fee=7), 0)\nAssertionError: 7 != 0\n\n======================================================================\nFAIL: test_negative_values (test_order.OrderTest.test_negative_values)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 18, in test_negative_values\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_threshold_is_free (test_order.OrderTest.test_threshold_is_free)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 11, in test_threshold_is_free\n    self.assertEqual(calculate_shipping(100), 0)\nAssertionError: 10 != 0\n\n----------------------------------------------------------------------\nRan 4 tests in 0.002s\n\nFAILED (failures=3)\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... FAIL\ntest_negative_values (test_order.OrderTest.test_negative_values) ... FAIL\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... FAIL\n\n======================================================================\nFAIL: test_custom_threshold (test_order.OrderTest.test_custom_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 14, in test_custom_threshold\n    self.assertEqual(calculate_shipping(50, free_from=50, fee=7), 0)\nAssertionError: 7 != 0\n\n======================================================================\nFAIL: test_negative_values (test_order.OrderTest.test_negative_values)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 18, in test_negative_values\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n======================================================================\nFAIL: test_threshold_is_free (test_order.OrderTest.test_threshold_is_free)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 11, in test_threshold_is_free\n    self.assertEqual(calculate_shipping(100), 0)\nAssertionError: 10 != 0\n\n----------------------------------------------------------------------\nRan 4 tests in 0.002s\n\nFAILED (failures=3)",
+                  "sha256": "25ee2c0c7e4005d86cd8319571c033a1068d0b93bfbaf2c3ee12bb3a61a0f270"
+                },
+                "start": {
+                  "seq": 24,
+                  "line": 24
+                },
+                "result": {
+                  "seq": 27,
+                  "line": 27
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_r5fjp1mv",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.002s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 36,
+                  "line": 36
+                },
+                "result": {
+                  "seq": 39,
+                  "line": 39
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_l0u3gv5m",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 42,
+                  "line": 42
+                },
+                "result": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_aotcmrsc",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_shipping; print(calculate_shipping(99))\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "10\n",
+                "signature": null,
+                "start": {
+                  "seq": 49,
+                  "line": 49
+                },
+                "result": {
+                  "seq": 52,
+                  "line": 52
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_96r4tcd6",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_shipping; print(calculate_shipping(99))\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "10\n",
+                "signature": null,
+                "start": {
+                  "seq": 55,
+                  "line": 55
+                },
+                "result": {
+                  "seq": 56,
+                  "line": 56
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_8nwiwf1j",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 62,
+                  "line": 62
+                },
+                "result": {
+                  "seq": 65,
+                  "line": 65
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_v89wz0kl",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 68,
+                  "line": 68
+                },
+                "result": {
+                  "seq": 69,
+                  "line": 69
+                },
+                "task_id": "t3"
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r2-quantity-baseline",
+      "task_id": "quantity",
+      "variant": "baseline",
+      "run_id": "r20261121-170637-911d",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "line_total:(12.5, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(12.5, 0)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0, 5)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0.1, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(5, 1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(-0.01, 2)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, -1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, 1.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, True)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, False)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 24.747,
+      "tool_calls": 8,
+      "model_requests": 8,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 0,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r2-quantity-baseline/trace/r20261121-170637-911d/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-quantity-baseline\\trace\\r20261121-170637-911d\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 3,
+          "failed_executions": 0,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170637-911d",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-quantity-baseline\\trace\\r20261121-170637-911d\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-quantity-baseline\\workspace",
+            "task": "Исправь calculate_line_total в order.py. Стоимость строки равна unit_price * quantity. Цена должна быть неотрицательной, quantity — неотрицательное целое число; bool не считается целым количеством. Невалидная цена или количество вызывают ValueError. При нулевом количестве результат 0. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_ptsak1hw",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 3) == 37.5\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_dlqgxftw",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 37,
+                  "line": 37
+                },
+                "result": {
+                  "seq": 40,
+                  "line": 40
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_m4g0ki0y",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "result": {
+                  "seq": 44,
+                  "line": 44
+                },
+                "task_id": "t2"
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r2-quantity-changed",
+      "task_id": "quantity",
+      "variant": "changed",
+      "run_id": "r20261121-170702-8154",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "line_total:(12.5, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(12.5, 0)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0, 5)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0.1, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(5, 1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(-0.01, 2)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, -1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, 1.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, True)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, False)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 23.985,
+      "tool_calls": 8,
+      "model_requests": 8,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 0,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r2-quantity-changed/trace/r20261121-170702-8154/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-quantity-changed\\trace\\r20261121-170702-8154\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 3,
+          "failed_executions": 0,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170702-8154",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-quantity-changed\\trace\\r20261121-170702-8154\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-quantity-changed\\workspace",
+            "task": "Исправь calculate_line_total в order.py. Стоимость строки равна unit_price * quantity. Цена должна быть неотрицательной, quantity — неотрицательное целое число; bool не считается целым количеством. Невалидная цена или количество вызывают ValueError. При нулевом количестве результат 0. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_kfjp0p8u",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; print(calculate_line_total(12.5, 3))\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "37.5\n",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_0oj2m8kx",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 37,
+                  "line": 37
+                },
+                "result": {
+                  "seq": 40,
+                  "line": 40
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_6cjr9px3",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "result": {
+                  "seq": 44,
+                  "line": 44
+                },
+                "task_id": "t2"
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r2-shipping-baseline",
+      "task_id": "shipping",
+      "variant": "baseline",
+      "run_id": "r20261121-170612-09f2",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "shipping:(99,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(100,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(101,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0, 0, 7)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(49.5, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(50, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(-0.01,)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, -0.01)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, 100, -0.01)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 24.423,
+      "tool_calls": 8,
+      "model_requests": 8,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 0,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r2-shipping-baseline/trace/r20261121-170612-09f2/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-shipping-baseline\\trace\\r20261121-170612-09f2\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 3,
+          "failed_executions": 0,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170612-09f2",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-shipping-baseline\\trace\\r20261121-170612-09f2\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-shipping-baseline\\workspace",
+            "task": "Исправь calculate_shipping в order.py. Для неотрицательной суммы subtotal доставка бесплатна, когда subtotal >= free_from; иначе стоимость доставки равна fee. Значения по умолчанию: free_from=100, fee=10. Отрицательные subtotal, free_from или fee должны вызывать ValueError. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_fryfc5n3",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_shipping; assert calculate_shipping(99) == 10; assert calculate_shipping(100) == 0; assert calculate_shipping(50, free_from=50, fee=7) == 0; print('OK')\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "OK\n",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_zmylc0os",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 37,
+                  "line": 37
+                },
+                "result": {
+                  "seq": 40,
+                  "line": 40
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_yhjea8s7",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "result": {
+                  "seq": 44,
+                  "line": 44
+                },
+                "task_id": "t2"
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r2-shipping-changed",
+      "task_id": "shipping",
+      "variant": "changed",
+      "run_id": "r20261121-170049-2a3e",
+      "independent_grade": "fail",
+      "artifact_success": false,
+      "independent_result": {
+        "status": "fail",
+        "checks": [
+          {
+            "name": "shipping:(99,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(100,)",
+            "passed": false,
+            "reason": "AssertionError: expected 0, got 10"
+          },
+          {
+            "name": "shipping:(101,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0, 0, 7)",
+            "passed": false,
+            "reason": "AssertionError: expected 0, got 7"
+          },
+          {
+            "name": "shipping:(49.5, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(50, 50, 3.5)",
+            "passed": false,
+            "reason": "AssertionError: expected 0, got 3.5"
+          },
+          {
+            "name": "reject_shipping:(-0.01,)",
+            "passed": false,
+            "reason": "AssertionError: expected ValueError for (-0.01,)"
+          },
+          {
+            "name": "reject_shipping:(10, -0.01)",
+            "passed": false,
+            "reason": "AssertionError: expected ValueError for (10, -0.01)"
+          },
+          {
+            "name": "reject_shipping:(10, 100, -0.01)",
+            "passed": false,
+            "reason": "AssertionError: expected ValueError for (10, 100, -0.01)"
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "failed",
+      "agent_completed": false,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": "ошибка API модели: модель недоступна: timed out",
+      "full_time_s": 322.997,
+      "tool_calls": 3,
+      "model_requests": 6,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 0,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r2-shipping-changed/trace/r20261121-170049-2a3e/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-shipping-changed\\trace\\r20261121-170049-2a3e\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 0,
+          "failed_executions": 0,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170049-2a3e",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-shipping-changed\\trace\\r20261121-170049-2a3e\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r2-shipping-changed\\workspace",
+            "task": "Исправь calculate_shipping в order.py. Для неотрицательной суммы subtotal доставка бесплатна, когда subtotal >= free_from; иначе стоимость доставки равна fee. Значения по умолчанию: free_from=100, fee=10. Отрицательные subtotal, free_from или fee должны вызывать ValueError. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "failed",
+            "complete": true,
+            "warnings": [],
+            "executions": [],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 3
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r3-quantity-baseline",
+      "task_id": "quantity",
+      "variant": "baseline",
+      "run_id": "r20261121-170921-2089",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "line_total:(12.5, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(12.5, 0)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0, 5)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0.1, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(5, 1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(-0.01, 2)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, -1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, 1.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, True)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, False)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 31.721,
+      "tool_calls": 12,
+      "model_requests": 12,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 1,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r3-quantity-baseline/trace/r20261121-170921-2089/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-quantity-baseline\\trace\\r20261121-170921-2089\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 7,
+          "failed_executions": 1,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170921-2089",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-quantity-baseline\\trace\\r20261121-170921-2089\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-quantity-baseline\\workspace",
+            "task": "Исправь calculate_line_total в order.py. Стоимость строки равна unit_price * quantity. Цена должна быть неотрицательной, quantity — неотрицательное целое число; bool не считается целым количеством. Невалидная цена или количество вызывают ValueError. При нулевом количестве результат 0. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_v84rviol",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 3) == 37.5\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 33,
+                  "line": 33
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_3utl728f",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 0) == 0\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 36,
+                  "line": 36
+                },
+                "result": {
+                  "seq": 39,
+                  "line": 39
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_fkaugcnp",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative",
+                  "sha256": "a7addc902258bc83361d894b9534eca94ca7f4af7ca7d27b7f1e903bc02ac9ea"
+                },
+                "start": {
+                  "seq": 42,
+                  "line": 42
+                },
+                "result": {
+                  "seq": 45,
+                  "line": 45
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_3obpgocx",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 3) == 37.5\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 48,
+                  "line": 48
+                },
+                "result": {
+                  "seq": 49,
+                  "line": 49
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_9fomqbuu",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; assert calculate_line_total(12.5, 0) == 0\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "",
+                "signature": null,
+                "start": {
+                  "seq": 55,
+                  "line": 55
+                },
+                "result": {
+                  "seq": 56,
+                  "line": 56
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_c9urbqyy",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; [calculate_line_total(*args) for args in ((-1, 2), (10, -1), (10, 1.5), (10, True))]\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 1,
+                "expected_exit_code": 1,
+                "timed_out": false,
+                "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/workspace/order.py\", line 3, in calculate_line_total\n    raise ValueError(\"unit_price must be non-negative\")\nValueError: unit_price must be non-negative\n",
+                "signature": null,
+                "start": {
+                  "seq": 62,
+                  "line": 62
+                },
+                "result": {
+                  "seq": 63,
+                  "line": 63
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_0qz66ryt",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\ntest_multiplication (test_order.OrderTest.test_multiplication) ... ok\ntest_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 68,
+                  "line": 68
+                },
+                "result": {
+                  "seq": 71,
+                  "line": 71
+                },
+                "task_id": null
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r3-quantity-changed",
+      "task_id": "quantity",
+      "variant": "changed",
+      "run_id": "r20261121-170825-d6d6",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "line_total:(12.5, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(12.5, 0)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0, 5)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(0.1, 3)",
+            "passed": true
+          },
+          {
+            "name": "line_total:(5, 1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(-0.01, 2)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, -1)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, 1.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, True)",
+            "passed": true
+          },
+          {
+            "name": "reject_quantity:(10, False)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 55.748,
+      "tool_calls": 21,
+      "model_requests": 21,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 1,
+      "repeat_episodes": 1,
+      "failed_executions": 5,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r3-quantity-changed/trace/r20261121-170825-d6d6/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-quantity-changed\\trace\\r20261121-170825-d6d6\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 1,
+          "executions": 12,
+          "failed_executions": 5,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 1,
+          "repeated_failures": 1,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170825-d6d6",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-quantity-changed\\trace\\r20261121-170825-d6d6\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-quantity-changed\\workspace",
+            "task": "Исправь calculate_line_total в order.py. Стоимость строки равна unit_price * quantity. Цена должна быть неотрицательной, quantity — неотрицательное целое число; bool не считается целым количеством. Невалидная цена или количество вызывают ValueError. При нулевом количестве результат 0. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_hg5plb5z",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_line_total; print(calculate_line_total(12.5, 3))\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "37.5\n",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_dluukdxu",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v OrderTest.test_zero_quantity",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)",
+                  "sha256": "9d174058067d1d7a88783bb5d1b620f7ef41af4f2ae4c9a888c975f496c0f7db"
+                },
+                "start": {
+                  "seq": 37,
+                  "line": 37
+                },
+                "result": {
+                  "seq": 40,
+                  "line": 40
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_t3044tss",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.OrderTest.test_zero_quantity",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "result": {
+                  "seq": 46,
+                  "line": 46
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_ozf2sr8e",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v OrderTest.test_zero_quantity",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)",
+                  "sha256": "9d174058067d1d7a88783bb5d1b620f7ef41af4f2ae4c9a888c975f496c0f7db"
+                },
+                "start": {
+                  "seq": 49,
+                  "line": 49
+                },
+                "result": {
+                  "seq": 50,
+                  "line": 50
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_i5pdvv2u",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.OrderTest.test_zero_quantity",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_zero_quantity (test_order.OrderTest.test_zero_quantity) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 53,
+                  "line": 53
+                },
+                "result": {
+                  "seq": 54,
+                  "line": 54
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_kqwnfynm",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... FAIL\n\n======================================================================\nFAIL: test_invalid_inputs (test_order.OrderTest.test_invalid_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 15, in test_invalid_inputs\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... FAIL\n\n======================================================================\nFAIL: test_invalid_inputs (test_order.OrderTest.test_invalid_inputs)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/test_order.py\", line 15, in test_invalid_inputs\n    with self.assertRaises(ValueError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)",
+                  "sha256": "01d79585398ac041436800959c3d1f888842c8d9df98710235ef28cf7773887e"
+                },
+                "start": {
+                  "seq": 60,
+                  "line": 60
+                },
+                "result": {
+                  "seq": 63,
+                  "line": 63
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_xi486j98",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 88,
+                  "line": 88
+                },
+                "result": {
+                  "seq": 91,
+                  "line": 91
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_pp9wcerc",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)",
+                  "sha256": "9d174058067d1d7a88783bb5d1b620f7ef41af4f2ae4c9a888c975f496c0f7db"
+                },
+                "start": {
+                  "seq": 94,
+                  "line": 94
+                },
+                "result": {
+                  "seq": 95,
+                  "line": 95
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_vuo9crsw",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.OrderTest.test_invalid_inputs",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_invalid_inputs (test_order.OrderTest.test_invalid_inputs) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 98,
+                  "line": 98
+                },
+                "result": {
+                  "seq": 99,
+                  "line": 99
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_f0k95yyb",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.OrderTest.test_multiplication",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_multiplication (test_order.OrderTest.test_multiplication) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 105,
+                  "line": 105
+                },
+                "result": {
+                  "seq": 108,
+                  "line": 108
+                },
+                "task_id": "t4"
+              },
+              {
+                "call_id": "call_8x2yekcg",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v OrderTest.test_multiplication",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)",
+                  "sha256": "9d174058067d1d7a88783bb5d1b620f7ef41af4f2ae4c9a888c975f496c0f7db"
+                },
+                "start": {
+                  "seq": 111,
+                  "line": 111
+                },
+                "result": {
+                  "seq": 112,
+                  "line": 112
+                },
+                "task_id": "t4"
+              },
+              {
+                "call_id": "call_ikrvn2nv",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.OrderTest.test_multiplication",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_multiplication (test_order.OrderTest.test_multiplication) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 115,
+                  "line": 115
+                },
+                "result": {
+                  "seq": 116,
+                  "line": 116
+                },
+                "task_id": "t4"
+              }
+            ],
+            "findings": [
+              {
+                "command": "python -m unittest -v OrderTest.test_zero_quantity",
+                "cwd": ".",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)",
+                  "sha256": "9d174058067d1d7a88783bb5d1b620f7ef41af4f2ae4c9a888c975f496c0f7db"
+                },
+                "occurrences": [
+                  {
+                    "call_id": "call_dluukdxu",
+                    "attempt": 1,
+                    "tool": "Bash",
+                    "command": "python -m unittest -v OrderTest.test_zero_quantity",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 1,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+                    "signature": {
+                      "exit_code": 1,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)",
+                      "sha256": "9d174058067d1d7a88783bb5d1b620f7ef41af4f2ae4c9a888c975f496c0f7db"
+                    },
+                    "start": {
+                      "seq": 37,
+                      "line": 37
+                    },
+                    "result": {
+                      "seq": 40,
+                      "line": 40
+                    },
+                    "task_id": "t2"
+                  },
+                  {
+                    "call_id": "call_ozf2sr8e",
+                    "attempt": 1,
+                    "tool": "complete_task",
+                    "command": "python -m unittest -v OrderTest.test_zero_quantity",
+                    "cwd": ".",
+                    "state": "failure",
+                    "exit_code": 1,
+                    "expected_exit_code": 0,
+                    "timed_out": false,
+                    "output": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+                    "signature": {
+                      "exit_code": 1,
+                      "expected_exit_code": 0,
+                      "timed_out": false,
+                      "diagnostic": "OrderTest (unittest.loader._FailedTest.OrderTest) ... ERROR\n\n======================================================================\nERROR: OrderTest (unittest.loader._FailedTest.OrderTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: OrderTest\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'OrderTest'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)",
+                      "sha256": "9d174058067d1d7a88783bb5d1b620f7ef41af4f2ae4c9a888c975f496c0f7db"
+                    },
+                    "start": {
+                      "seq": 49,
+                      "line": 49
+                    },
+                    "result": {
+                      "seq": 50,
+                      "line": 50
+                    },
+                    "task_id": "t2"
+                  }
+                ],
+                "repeat_count": 1,
+                "between": [
+                  {
+                    "from": {
+                      "seq": 40,
+                      "line": 40
+                    },
+                    "to": {
+                      "seq": 49,
+                      "line": 49
+                    },
+                    "actions": [
+                      {
+                        "seq": 43,
+                        "line": 43,
+                        "call_id": "call_t3044tss",
+                        "attempt": 1,
+                        "tool": "Bash",
+                        "arguments": {
+                          "command": "python -m unittest -v test_order.OrderTest.test_zero_quantity"
+                        }
+                      }
+                    ],
+                    "changes": []
+                  }
+                ],
+                "interpretation": "Команда повторно дала тот же сохранённый неуспешный результат. Причина ошибки и полезность повторов требуют отдельной проверки."
+              }
+            ],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r3-shipping-baseline",
+      "task_id": "shipping",
+      "variant": "baseline",
+      "run_id": "r20261121-170726-807f",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "shipping:(99,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(100,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(101,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0, 0, 7)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(49.5, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(50, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(-0.01,)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, -0.01)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, 100, -0.01)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 22.383,
+      "tool_calls": 8,
+      "model_requests": 8,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 0,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r3-shipping-baseline/trace/r20261121-170726-807f/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-shipping-baseline\\trace\\r20261121-170726-807f\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 3,
+          "failed_executions": 0,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170726-807f",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-shipping-baseline\\trace\\r20261121-170726-807f\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-shipping-baseline\\workspace",
+            "task": "Исправь calculate_shipping в order.py. Для неотрицательной суммы subtotal доставка бесплатна, когда subtotal >= free_from; иначе стоимость доставки равна fee. Значения по умолчанию: free_from=100, fee=10. Отрицательные subtotal, free_from или fee должны вызывать ValueError. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_mykvb4jd",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_shipping; print(calculate_shipping(99), calculate_shipping(100), calculate_shipping(50, free_from=50, fee=7))\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "10 0 0\n",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_pbmcs20g",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 37,
+                  "line": 37
+                },
+                "result": {
+                  "seq": 40,
+                  "line": 40
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_qusyhnf2",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v test_order.py",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "result": {
+                  "seq": 44,
+                  "line": 44
+                },
+                "task_id": "t2"
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "source": "r3-shipping-changed",
+      "task_id": "shipping",
+      "variant": "changed",
+      "run_id": "r20261121-170748-1ad2",
+      "independent_grade": "pass",
+      "artifact_success": true,
+      "independent_result": {
+        "status": "pass",
+        "checks": [
+          {
+            "name": "shipping:(99,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(100,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(101,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0,)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(0, 0, 7)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(49.5, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "shipping:(50, 50, 3.5)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(-0.01,)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, -0.01)",
+            "passed": true
+          },
+          {
+            "name": "reject_shipping:(10, 100, -0.01)",
+            "passed": true
+          }
+        ],
+        "captured_output": ""
+      },
+      "agent_status": "completed",
+      "agent_completed": true,
+      "externally_interrupted": false,
+      "inferred_fields": [],
+      "restriction_violations": [],
+      "error": null,
+      "stop_reason": null,
+      "full_time_s": 37.056,
+      "tool_calls": 12,
+      "model_requests": 12,
+      "tokens": null,
+      "tokens_unknown_reason": "Текущий harness не сохраняет usage модели.",
+      "repeated_failures": 0,
+      "repeat_episodes": 0,
+      "failed_executions": 2,
+      "unknown_executions": 0,
+      "analysis_complete": true,
+      "journal": "r3-shipping-changed/trace/r20261121-170748-1ad2/journal.jsonl",
+      "analysis": {
+        "schema_version": 1,
+        "question": "Какие неуспешные команды проверок агент повторяет и что делает между ними?",
+        "method": {
+          "id": "exact-command-failure-chains-v1",
+          "scope": "Bash-команды и фактические проверки complete_task; назначение произвольной Bash-команды не угадывается.",
+          "matching": "Точный текст команды, записанный cwd, ожидаемый и фактический коды, таймаут и точная сохранённая диагностика (без внешних пробелов).",
+          "chains": "Успех, неизвестный исход или другая диагностика той же команды прерывают цепочку. Пропуски seq и несопоставленные/неоднозначные события прерывают активные цепочки. Действия других команд показаны между повторами.",
+          "interpretation": "Повтор наблюдаем; его бесполезность и причина по совпадению не установлены.",
+          "limitations": [
+            "Разные shell-записи одной операции и разные записи пути не объединяются.",
+            "Динамические пути, таймстемпы и изменившийся текст диагностики могут скрыть похожую ошибку.",
+            "Усечённая диагностика не используется для точного сопоставления; complete_task сохраняет только хвост вывода.",
+            "Журнал не доказывает отсутствие внешних изменений, сетевых эффектов или изменений окружения."
+          ]
+        },
+        "input": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-shipping-changed\\trace\\r20261121-170748-1ad2\\journal.jsonl",
+        "complete": true,
+        "summary": {
+          "files_seen": 1,
+          "sessions_analyzed": 1,
+          "sessions_with_repeats": 0,
+          "executions": 7,
+          "failed_executions": 2,
+          "unknown_executions": 0,
+          "uncomparable_failures": 0,
+          "repeat_episodes": 0,
+          "repeated_failures": 0,
+          "incomplete_sessions": 0
+        },
+        "sessions": [
+          {
+            "session_id": "r20261121-170748-1ad2",
+            "source": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-shipping-changed\\trace\\r20261121-170748-1ad2\\journal.jsonl",
+            "workspace": "C:\\Users\\Remsely\\dev\\cu\\ai-devtools\\coding-agent\\evals\\sessions\\comparison\\r3-shipping-changed\\workspace",
+            "task": "Исправь calculate_shipping в order.py. Для неотрицательной суммы subtotal доставка бесплатна, когда subtotal >= free_from; иначе стоимость доставки равна fee. Значения по умолчанию: free_from=100, fee=10. Отрицательные subtotal, free_from или fee должны вызывать ValueError. Тесты и другие файлы не меняй. Изучи проект, исправь код и проверь результат.",
+            "status": "completed",
+            "complete": true,
+            "warnings": [],
+            "executions": [
+              {
+                "call_id": "call_f33rgk7c",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_shipping; print(calculate_shipping(99)); print(calculate_shipping(100)); print(calculate_shipping(50, free_from=50, fee=7))\"",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "10\n0\n0\n",
+                "signature": null,
+                "start": {
+                  "seq": 30,
+                  "line": 30
+                },
+                "result": {
+                  "seq": 31,
+                  "line": 31
+                },
+                "task_id": "t1"
+              },
+              {
+                "call_id": "call_nhwn5mmn",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -c \"from order import calculate_shipping; calculate_shipping(-1); print('FAIL')\" 2>&1 | grep -q 'ValueError' && echo 'PASS'",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "PASS\n",
+                "signature": null,
+                "start": {
+                  "seq": 37,
+                  "line": 37
+                },
+                "result": {
+                  "seq": 40,
+                  "line": 40
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_q5jwvuwp",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_shipping; calculate_shipping(-1); print('FAIL')\" 2>&1 | grep -q 'ValueError' && echo 'PASS'\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 2,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'\n",
+                "signature": {
+                  "exit_code": 2,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "/bin/bash: -c: line 1: unexpected EOF while looking for matching `\"'",
+                  "sha256": "8713a99c0b63b59869da44f0ba69e1ea5eab349ce07909db4db1d8182d00a668"
+                },
+                "start": {
+                  "seq": 43,
+                  "line": 43
+                },
+                "result": {
+                  "seq": 44,
+                  "line": 44
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_qe2fbyt8",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -c \"from order import calculate_shipping; try: calculate_shipping(-1); print('FAIL'); except ValueError: print('PASS')\"",
+                "cwd": ".",
+                "state": "failure",
+                "exit_code": 1,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "  File \"<string>\", line 1\n    from order import calculate_shipping; try: calculate_shipping(-1); print('FAIL'); except ValueError: print('PASS')\n                                          ^^^\nSyntaxError: invalid syntax\n",
+                "signature": {
+                  "exit_code": 1,
+                  "expected_exit_code": 0,
+                  "timed_out": false,
+                  "diagnostic": "File \"<string>\", line 1\n    from order import calculate_shipping; try: calculate_shipping(-1); print('FAIL'); except ValueError: print('PASS')\n                                          ^^^\nSyntaxError: invalid syntax",
+                  "sha256": "546c7768694402f46ea64bd1e9e88a989130d10576c0aef67f7314ef953d86ce"
+                },
+                "start": {
+                  "seq": 47,
+                  "line": 47
+                },
+                "result": {
+                  "seq": 48,
+                  "line": 48
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_n8bm7ffb",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v OrderTest.test_negative_values 2>&1 | grep -q 'test_negative_values.*ok' && echo 'PASS' || echo 'FAIL'",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "FAIL\n",
+                "signature": null,
+                "start": {
+                  "seq": 51,
+                  "line": 51
+                },
+                "result": {
+                  "seq": 52,
+                  "line": 52
+                },
+                "task_id": "t2"
+              },
+              {
+                "call_id": "call_8njstsar",
+                "attempt": 1,
+                "tool": "Bash",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 58,
+                  "line": 58
+                },
+                "result": {
+                  "seq": 61,
+                  "line": 61
+                },
+                "task_id": "t3"
+              },
+              {
+                "call_id": "call_69kef5sq",
+                "attempt": 1,
+                "tool": "complete_task",
+                "command": "python -m unittest -v",
+                "cwd": ".",
+                "state": "success",
+                "exit_code": 0,
+                "expected_exit_code": 0,
+                "timed_out": false,
+                "output": "test_below_threshold (test_order.OrderTest.test_below_threshold) ... ok\ntest_custom_threshold (test_order.OrderTest.test_custom_threshold) ... ok\ntest_negative_values (test_order.OrderTest.test_negative_values) ... ok\ntest_threshold_is_free (test_order.OrderTest.test_threshold_is_free) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+                "signature": null,
+                "start": {
+                  "seq": 64,
+                  "line": 64
+                },
+                "result": {
+                  "seq": 65,
+                  "line": 65
+                },
+                "task_id": "t3"
+              }
+            ],
+            "findings": [],
+            "replayed_calls": 0,
+            "refused_calls": 0
+          }
+        ],
+        "errors": []
+      }
+    }
+  ],
+  "aggregates": [
+    {
+      "task_id": "all",
+      "variant": "baseline",
+      "runs": 6,
+      "artifact_successes": 6,
+      "artifact_failures": 0,
+      "unknown_artifacts": 0,
+      "agent_completed": 5,
+      "agent_noncompleted": 1,
+      "agent_completion_unknown": 0,
+      "repeated_failures": {
+        "median": 0.0,
+        "sum": 5,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      },
+      "full_time_s": {
+        "median": 28.234,
+        "sum": 500.87199999999996,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      },
+      "tool_calls": {
+        "median": 8.0,
+        "sum": 63,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      },
+      "model_requests": {
+        "median": 8.0,
+        "sum": 63,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      }
+    },
+    {
+      "task_id": "all",
+      "variant": "changed",
+      "runs": 6,
+      "artifact_successes": 5,
+      "artifact_failures": 1,
+      "unknown_artifacts": 0,
+      "agent_completed": 5,
+      "agent_noncompleted": 1,
+      "agent_completion_unknown": 0,
+      "repeated_failures": {
+        "median": 0.0,
+        "sum": 4,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      },
+      "full_time_s": {
+        "median": 46.402,
+        "sum": 535.306,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      },
+      "tool_calls": {
+        "median": 12.0,
+        "sum": 77,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      },
+      "model_requests": {
+        "median": 12.0,
+        "sum": 80,
+        "measured_runs": 6,
+        "unknown_runs": 0
+      }
+    },
+    {
+      "task_id": "quantity",
+      "variant": "baseline",
+      "runs": 3,
+      "artifact_successes": 3,
+      "artifact_failures": 0,
+      "unknown_artifacts": 0,
+      "agent_completed": 3,
+      "agent_noncompleted": 0,
+      "agent_completion_unknown": 0,
+      "repeated_failures": {
+        "median": 0,
+        "sum": 5,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "full_time_s": {
+        "median": 31.721,
+        "sum": 136.82999999999998,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "tool_calls": {
+        "median": 12,
+        "sum": 41,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "model_requests": {
+        "median": 12,
+        "sum": 41,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      }
+    },
+    {
+      "task_id": "quantity",
+      "variant": "changed",
+      "runs": 3,
+      "artifact_successes": 3,
+      "artifact_failures": 0,
+      "unknown_artifacts": 0,
+      "agent_completed": 3,
+      "agent_noncompleted": 0,
+      "agent_completion_unknown": 0,
+      "repeated_failures": {
+        "median": 1,
+        "sum": 4,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "full_time_s": {
+        "median": 55.748,
+        "sum": 145.325,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "tool_calls": {
+        "median": 21,
+        "sum": 50,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "model_requests": {
+        "median": 21,
+        "sum": 50,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      }
+    },
+    {
+      "task_id": "shipping",
+      "variant": "baseline",
+      "runs": 3,
+      "artifact_successes": 3,
+      "artifact_failures": 0,
+      "unknown_artifacts": 0,
+      "agent_completed": 2,
+      "agent_noncompleted": 1,
+      "agent_completion_unknown": 0,
+      "repeated_failures": {
+        "median": 0,
+        "sum": 0,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "full_time_s": {
+        "median": 24.423,
+        "sum": 364.042,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "tool_calls": {
+        "median": 8,
+        "sum": 22,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "model_requests": {
+        "median": 8,
+        "sum": 22,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      }
+    },
+    {
+      "task_id": "shipping",
+      "variant": "changed",
+      "runs": 3,
+      "artifact_successes": 2,
+      "artifact_failures": 1,
+      "unknown_artifacts": 0,
+      "agent_completed": 2,
+      "agent_noncompleted": 1,
+      "agent_completion_unknown": 0,
+      "repeated_failures": {
+        "median": 0,
+        "sum": 0,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "full_time_s": {
+        "median": 37.056,
+        "sum": 389.981,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "tool_calls": {
+        "median": 12,
+        "sum": 27,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      },
+      "model_requests": {
+        "median": 12,
+        "sum": 30,
+        "measured_runs": 3,
+        "unknown_runs": 0
+      }
+    }
+  ],
+  "conditions": {
+    "comparison_requested": true,
+    "comparable": true,
+    "checked_conditions": [
+      "model",
+      "base_url",
+      "model_parameters",
+      "limits",
+      "wall_timeout_s",
+      "image_id",
+      "isolation",
+      "harness_hashes",
+      "grader_sha256",
+      "runner_sha256",
+      "initial_hashes",
+      "task_sha256",
+      "initial_messages"
+    ],
+    "instructions": {
+      "baseline": "",
+      "changed": "При проектировании verification используй expect_exit_code=0: успешная проверка должна завершаться с нулевым кодом. Проверяя ожидаемый ValueError, запускай существующие unittest-тесты с assertRaises (например, python -m unittest -v): тест сам подтверждает исключение и завершается успешно. Не используй необработанное ожидаемое исключение в python -c как проверку с произвольно выбранным ненулевым кодом выхода.\n"
+    },
+    "scope": "Проверены сохранённые метаданные; это не доказательство отсутствия скрытых факторов."
+  },
+  "issues": [],
+  "provenance_notes": [],
+  "interpretation": "Победитель автоматически не определяется. Сопоставляйте повторы с независимым результатом, завершением агента, затратами и ограничениями. Малая выборка не доказывает статистическую значимость.",
+  "metric": "repeated_failures: наблюдаемое число повторных неудачных исполнений согласно методу AgentLens; повтор не доказывает бесполезность действия или причину ошибки."
+}
